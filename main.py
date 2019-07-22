@@ -21,7 +21,26 @@ nb_actions = env.action_space.n
 
 # build upper model.
 model = tf.keras.Sequential()
-model.add(tf.keras.layers.LSTM(128))
+model.add(tf.keras.layers.LSTM(128))  # A 3D tensor [batch, timesteps, inputdim]
+model.add(tf.keras.layers.Dense(nb_actions))
+model.add(Activation('relu'))
+print(model.summary())
+
+# build lower critic shared part
+lstm_model = tf.keras.Sequential()
+lstm_model.add(tf.keras.layers.LSTM(128))
+lstm_input = tf.keras.Input(shape=(None, TBD))
+action_input = tf.keras.Input(shape=(None, 2))  # [prob, v, 1, 0, 0]
+temp = tf.keras.layers.Dense(32)(lstm_input)
+dense_model.add(tf.keras.layers.Dense(32))
+prob_output = dense_model
+
+# build lower critic left
+left_input = tf.keras.Input(shape=(None, 10, TBD), name='left_encoder')
+encoded_tensor = tf.keras.layers.LSTM(128, stateful=True)(left_input)
+lstm_out = lstm_model(encoded_tensor)
+
+
 model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
 model.add(Dense(16))
 model.add(Activation('relu'))
