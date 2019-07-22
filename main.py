@@ -21,6 +21,7 @@ nb_actions = env.action_space.n
 
 # build upper model.
 model = tf.keras.Sequential()
+model.add(tf.keras.layers.LSTM(128))
 model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
 model.add(Dense(16))
 model.add(Activation('relu'))
