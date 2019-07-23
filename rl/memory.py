@@ -141,7 +141,7 @@ class Memory(object):
             state.insert(0, self.recent_observations[current_idx])
         while len(state) < self.window_length:
             state.insert(0, zeroed_observation(state[0]))
-        return state
+        return state[0]  # changed
 
     def get_config(self):
         """Return configuration (window_length, ignore_episode_boundaries) for Memory
@@ -233,8 +233,8 @@ class SequentialMemory(Memory):
 
             assert len(state0) == self.window_length
             assert len(state1) == len(state0)
-            experiences.append(Experience(state0=state0, action=action, reward=reward,
-                                          state1=state1, terminal1=terminal1))
+            experiences.append(Experience(state0=state0[0], action=action, reward=reward,
+                                          state1=state1[0], terminal1=terminal1))  # changed
         assert len(experiences) == batch_size
         return experiences
 

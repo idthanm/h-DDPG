@@ -198,7 +198,7 @@ class DQNAgent(AbstractDQNAgent):
         trainable_model = Model(inputs=ins + [y_true, mask], outputs=[loss_out, y_pred])
         assert len(trainable_model.output_names) == 2
         combined_metrics = {trainable_model.output_names[1]: metrics}
-        losses = [
+        losses = [  # TODO
             lambda y_true, y_pred: y_pred,  # loss is computed in Lambda layer
             lambda y_true, y_pred: tf.zeros_like(y_pred),  # we only include this for the metrics
         ]
@@ -226,7 +226,7 @@ class DQNAgent(AbstractDQNAgent):
 
     def forward(self, observation):
         # Select an action.
-        state = self.memory.get_recent_state(observation)
+        state = self.memory.get_recent_state(observation)  # TODO
         q_values = self.compute_q_values(state)
         if self.training:
             action = self.policy.select_action(q_values=q_values)
