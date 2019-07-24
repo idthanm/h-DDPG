@@ -7,9 +7,9 @@ from tempfile import mkdtemp
 
 import numpy as np
 
-from keras import __version__ as KERAS_VERSION
-from keras.callbacks import Callback as KerasCallback, CallbackList as KerasCallbackList
-from keras.utils.generic_utils import Progbar
+from tensorflow.python.keras import __version__ as KERAS_VERSION
+from tensorflow.python.keras.callbacks import Callback as KerasCallback, CallbackList as KerasCallbackList
+from tensorflow.python.keras.utils.generic_utils import Progbar
 
 
 class Callback(KerasCallback):

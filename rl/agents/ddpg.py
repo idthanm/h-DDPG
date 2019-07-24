@@ -4,8 +4,8 @@ import os
 import warnings
 
 import numpy as np
-import keras.backend as K
-import keras.optimizers as optimizers
+import tensorflow.python.keras.backend as K
+import tensorflow.python.keras.optimizers as optimizers
 
 from rl.core import Agent
 from rl.random import OrnsteinUhlenbeckProcess
@@ -144,13 +144,8 @@ class DDPGAgent(Agent):
         updates += self.actor.updates  # include other updates of the actor, e.g. for BN
 
         # Finally, combine it all into a callable function.
-        if K.backend() == 'tensorflow':
-            self.actor_train_fn = K.function(state_inputs + [K.learning_phase()],
+        self.actor_train_fn = K.function(state_inputs + [K.learning_phase()],
                                              [self.actor(state_inputs)], updates=updates)
-        else:
-            if self.uses_learning_phase:
-                state_inputs += [K.learning_phase()]
-            self.actor_train_fn = K.function(state_inputs, [self.actor(state_inputs)], updates=updates)
         self.actor_optimizer = actor_optimizer
 
         self.compiled = True
@@ -277,7 +272,7 @@ class DDPGAgent(Agent):
                     state1_batch_with_action = state1_batch[:]
                 else:
                     state1_batch_with_action = [state1_batch]
-                state1_batch_with_action.insert(self.critic_action_input_idx, target_actions)
+                state1_batch_with_action.insert(self.critic_action_input_idx, target_actions)  # TODO
                 target_q_values = self.target_critic.predict_on_batch(state1_batch_with_action).flatten()
                 assert target_q_values.shape == (self.batch_size,)
 
