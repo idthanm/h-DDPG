@@ -11,6 +11,7 @@ from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 from rl.agents.ddpg import DDPGAgent
+from rl.processors import WhiteningNormalizerProcessor
 
 
 # ENV_NAME = 'AutonomousDriving-v0'
@@ -34,7 +35,7 @@ def build_models():
     # build upper model.
     upper_model = Sequential(name='upper_model')
     upper_model.add(layers.LSTM(128))  # A 3D tensor [batch, timesteps, inputdim]
-    upper_model.add(layers.Dense(nb_actions, activation='relu'))
+    upper_model.add(layers.Dense(upper_nb_actions, activation='relu'))
 
     # build lower actor shared part----------------------------------------------
     actor_lstm_model = Sequential(name='shared_actor_lstm_model')
@@ -160,44 +161,66 @@ print(left_critic_model.input.index(critic_action_input))
 # tf.keras.utils.plot_model(right_critic_model, 'right_critic_model_with_shape_info.png', show_shapes=True)
 
 
-# Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
-# even the metrics!
+# define hyperparameter for DDPG agent
+MEMORY_LIMIT = 100000
+WINDOW_LENGTH = 1
+NB_STEPS_WARMUP_CRITIC = 100
+NB_STEPS_WARMUP_ACTOR = 100
+GAMMA = 0.99
+TARGET_MODEL_UPDATE = 1e-3
+RANDOM_PROCESS_THETA = 0.15
+RANDOM_PROCESS_MU = 0.
+RANDOM_PROCESS_SIGMA = 0.3
+OPTIMIZER_LR = 0.001
+OPTIMIZER_CLIPNORM = 1.0
+
+# define hyperparameter for DQN4Hrl
+MEMORY_LIMIT_UPPER = 50000
+WINDOW_LENGTH_UPPER = 1
+NB_STEPS_WARMUP_STEP = 100
+TARGET_MODEL_UPDATE_UPPER = 1e-2
+OPTIMIZER_LR_UPPER = 0.001
+
 
 # turn left agent
-left_memory = SequentialMemory(limit=100000, window_length=1)
-left_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
-left_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
-                       memory=left_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
-                       random_process=left_random_process, gamma=.99, target_model_update=1e-3)
-left_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+processor = WhiteningNormalizerProcessor()
+left_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
+left_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
+left_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model,
+                       critic=left_critic_model, critic_action_input=critic_action_input,
+                       memory=left_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
+                       random_process=left_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+left_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # go straight agent
-straight_memory = SequentialMemory(limit=100000, window_length=1)
-straight_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
-straight_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
-                           memory=straight_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
-                           random_process=straight_random_process, gamma=.99, target_model_update=1e-3)
-straight_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+straight_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
+straight_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
+straight_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model,
+                           critic=left_critic_model, critic_action_input=critic_action_input,
+                           memory=straight_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
+                           random_process=straight_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+straight_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # turn right agent
-right_memory = SequentialMemory(limit=100000, window_length=1)
-right_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
-right_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
-                        memory=right_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
-                        random_process=right_random_process, gamma=.99, target_model_update=1e-3)
-right_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+right_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
+right_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
+right_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model,
+                        critic_action_input=critic_action_input,
+                        memory=right_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
+                        random_process=right_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+right_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
-memory = SequentialMemory(limit=50000, window_length=1)
+memory = SequentialMemory(limit=MEMORY_LIMIT_UPPER, window_length=WINDOW_LENGTH_UPPER)
 policy = BoltzmannQPolicy()
-dqn = DQNAgent4Hrl(model=upper_model, turn_left_agent=left_agent, go_straight_agent=straight_agent,
-                   turn_right_agent=right_agent, nb_actions=upper_nb_actions, memory=memory, nb_steps_warmup=10,
-                   target_model_update=1e-2, policy=policy, enable_double_dqn=True)
-dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+dqn = DQNAgent4Hrl(processor=processor, model=upper_model, turn_left_agent=left_agent, go_straight_agent=straight_agent,
+                   turn_right_agent=right_agent, nb_actions=upper_nb_actions, memory=memory, nb_steps_warmup=NB_STEPS_WARMUP_STEP,
+                   target_model_update=TARGET_MODEL_UPDATE_UPPER, policy=policy, enable_double_dqn=True)
+dqn.compile(Adam(lr=OPTIMIZER_LR_UPPER), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-dqn.fit(env, nb_steps=50000, visualize=True, verbose=2)
+dqn.fit_hrl(env, nb_steps=50000, visualize=True, verbose=2)
 
 # After training is done, we save the final weights.
 dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)

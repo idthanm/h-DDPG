@@ -1,5 +1,6 @@
 from __future__ import division
 import warnings
+import os
 from copy import deepcopy
 
 from tensorflow.python.keras import Input, Model, layers
@@ -220,12 +221,26 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         self.compiled = True
 
-    def load_weights(self, filepath):  # TODO: add lower model
+    def load_weights(self, filepath):
         self.model.load_weights(filepath)
         self.update_target_model_hard()
+        filename, extension = os.path.splitext(filepath)
+        left_model_filepath = filename + '_left_model' + extension
+        straight_model_filepath = filename + '_straight_model' + extension
+        right_model_filepath = filename + '_right_model' + extension
+        self.turn_left_agent.load_weights(left_model_filepath)
+        self.go_straight_agent.load_weights(straight_model_filepath)
+        self.turn_right_agent.load_weights(right_model_filepath)
 
-    def save_weights(self, filepath, overwrite=False):  # TODO: add lower model
+    def save_weights(self, filepath, overwrite=False):
         self.model.save_weights(filepath, overwrite=overwrite)
+        filename, extension = os.path.splitext(filepath)
+        left_model_filepath = filename + '_left_model' + extension
+        straight_model_filepath = filename + '_straight_model' + extension
+        right_model_filepath = filename + '_right_model' + extension
+        self.turn_left_agent.save_weights(left_model_filepath, overwrite=overwrite)
+        self.go_straight_agent.save_weights(straight_model_filepath, overwrite=overwrite)
+        self.turn_right_agent.save_weights(right_model_filepath, overwrite=overwrite)
 
     def reset_states(self):
         self.recent_action = None
@@ -237,7 +252,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.go_straight_agent.reset_state()
         self.turn_right_agent.reset_state()
 
-    def update_target_model_hard(self):  # TODO: add lower model
+    def update_target_model_hard(self):
         self.target_model.set_weights(self.model.get_weights())
 
     def forward(self, observation):  # observation = [timesteps, features]
@@ -272,15 +287,15 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                                training=self.training)
             if self.recent_action == 0:
                 self.turn_left_agent.memory.append(self.turn_left_agent.recent_observation,
-                                                   self.turn_left_agent.recent_action, reward, terminal,
+                                                   self.turn_left_agent.recent_action, reward, 1,
                                                    training=self.training)
             elif self.recent_action == 1:
                 self.go_straight_agent.memory.append(self.go_straight_agent.recent_observation,
-                                                     self.go_straight_agent.recent_action, reward, terminal,
+                                                     self.go_straight_agent.recent_action, reward, 1,
                                                      training=self.training)
             else:
                 self.turn_right_agent.memory.append(self.turn_right_agent.recent_observation,
-                                                    self.turn_right_agent.recent_action, reward, terminal,
+                                                    self.turn_right_agent.recent_action, reward, 1,
                                                     training=self.training)
 
         self.turn_left_agent.backward(reward, terminal)  # these parameters have no use
@@ -453,6 +468,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             action = start_step_policy(observation)
             if self.processor is not None:
                 action = self.processor.process_action(action)  # [0/1/2, goal_delta_x, acc]
+            recent_action = action
+            recent_observation = observation
             callbacks.on_action_begin(action)
             observation, reward, done, info = env.step(action)
             observation = deepcopy(observation)
@@ -460,20 +477,27 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 observation, reward, done, info = self.processor.process_step(observation, reward, done, info)
             callbacks.on_action_end(action)
 
-            self.memory.append(self.recent_observation, self.recent_action, reward, terminal,
+            self.memory.append(recent_observation, recent_action[0], reward, done,
                                training=self.training)
             if self.recent_action == 0:
-                self.turn_left_agent.memory.append(self.turn_left_agent.recent_observation,
-                                                   self.turn_left_agent.recent_action, reward, terminal,
+                left_obs = recent_observation[:, :30] + recent_observation[:, -8:] + np.tile(np.array([1, 0, 0]), (
+                    recent_observation.shape[0], 1))  # 30 + 8 + 3 = 41
+                lower_action = recent_action[1:]
+                self.turn_left_agent.memory.append(left_obs, lower_action, reward, 1,
                                                    training=self.training)
             elif self.recent_action == 1:
-                self.go_straight_agent.memory.append(self.go_straight_agent.recent_observation,
-                                                     self.go_straight_agent.recent_action, reward, terminal,
+                straight_obs = deepcopy(recent_observation) + np.tile(np.array([0, 1, 0]),
+                                                                      (recent_observation.shape[0], 1))  # 56 + 3 = 59
+                lower_action = recent_action[1:]
+                self.go_straight_agent.memory.append(straight_obs, lower_action, reward, 1,
                                                      training=self.training)
             else:
-                self.turn_right_agent.memory.append(self.turn_right_agent.recent_observation,
-                                                    self.turn_right_agent.recent_action, reward, terminal,
+                right_obs = recent_observation[:, 18:] + np.tile(np.array([0, 0, 1]),
+                                                                 (recent_observation.shape[0], 1))  # 56- 18 + 3 = 41
+                lower_action = recent_action[1:]
+                self.turn_right_agent.memory.append(right_obs, lower_action, reward, 1,
                                                     training=self.training)
+            # TODO: always has a point is not done, but there would be only one bad point in the buffer
             if done:
                 observation = deepcopy(env.reset())
                 if self.processor is not None:
@@ -492,8 +516,6 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                     if self.processor is not None:
                         observation = self.processor.process_observation(observation)
                     assert observation is not None
-
-
 
                 # At this point, we expect to be fully initialized.
                 assert episode_reward is not None
@@ -543,17 +565,11 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 callbacks.on_step_end(episode_step, step_logs)
                 episode_step += 1
                 self.step += 1
+                self.turn_left_agent.step += 1
+                self.go_straight_agent.step += 1
+                self.turn_right_agent.step += 1
 
                 if done:
-                    # We are in a terminal state but the agent hasn't yet seen it. We therefore
-                    # perform one more forward-backward call and simply ignore the action before
-                    # resetting the environment. We need to pass in `terminal=False` here since
-                    # the *next* state, that is the state of the newly reset environment, is
-                    # always non-terminal by convention.
-                    self.forward(observation)
-                    self.backward(0., terminal=False)
-
-                    # This episode is finished, report and reset.
                     episode_logs = {
                         'episode_reward': episode_reward,
                         'nb_episode_steps': episode_step,
