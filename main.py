@@ -6,9 +6,11 @@ from tensorflow.python.keras import layers, Model, Sequential, Input
 from tensorflow.python.keras.layers import Lambda
 from tensorflow.python.keras.optimizers import Adam
 #
-from rl.agents.dqn import DQNAgent
+from rl.agents.dqn4hrl import DQNAgent4Hrl
 from rl.policy import BoltzmannQPolicy
 from rl.memory import SequentialMemory
+from rl.random import OrnsteinUhlenbeckProcess
+from rl.agents.ddpg import DDPGAgent
 
 
 # ENV_NAME = 'AutonomousDriving-v0'
@@ -19,7 +21,8 @@ from rl.memory import SequentialMemory
 # np.random.seed(123)
 # env.seed(123)
 # nb_actions = env.action_space.n
-nb_actions = 3
+upper_nb_actions = 3
+lower_nb_actions = 2
 TIME_STEPS = 10
 TBD_total = 7
 TBD_left = 7
@@ -128,9 +131,9 @@ def build_models():
                       straight_critic_model=straight_critic_model,
                       right_actor_model=right_actor_model,
                       right_critic_model=right_critic_model)
-    return model_dict, left_state_input
+    return model_dict, action_input
 
-model_dict, left_state_input = build_models()
+model_dict, critic_action_input = build_models()
 upper_model = model_dict['upper_model']
 
 left_actor_model = model_dict['left_actor_model']
@@ -144,7 +147,7 @@ right_critic_model = model_dict['right_critic_model']
 
 print(left_actor_model.input, left_critic_model.input)
 print(right_actor_model.input, right_critic_model.input)
-print(left_critic_model.input.index(left_state_input))
+print(left_critic_model.input.index(critic_action_input))
 
 
 
@@ -159,19 +162,45 @@ print(left_critic_model.input.index(left_state_input))
 
 # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
 # even the metrics!
-# memory = SequentialMemory(limit=50000, window_length=1)
-# policy = BoltzmannQPolicy()
-# dqn = DQNAgent(model=upper_model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,
-#                target_model_update=1e-2, policy=policy, enable_double_dqn=True)
-# dqn.compile(Adam(lr=1e-3), metrics=['mae'])
-#
-# # Okay, now it's time to learn something! We visualize the training here for show, but this
-# # slows down training quite a lot. You can always safely abort the training prematurely using
-# # Ctrl + C.
-# dqn.fit(env, nb_steps=50000, visualize=True, verbose=2)
-#
-# # After training is done, we save the final weights.
-# dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
-#
-# # Finally, evaluate our algorithm for 5 episodes.
-# dqn.test(env, nb_episodes=5, visualize=True)
+
+# turn left agent
+left_memory = SequentialMemory(limit=100000, window_length=1)
+left_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
+left_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
+                       memory=left_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
+                       random_process=left_random_process, gamma=.99, target_model_update=1e-3)
+left_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+
+# go straight agent
+straight_memory = SequentialMemory(limit=100000, window_length=1)
+straight_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
+straight_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
+                           memory=straight_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
+                           random_process=straight_random_process, gamma=.99, target_model_update=1e-3)
+straight_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+
+# turn right agent
+right_memory = SequentialMemory(limit=100000, window_length=1)
+right_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=.15, mu=0., sigma=.3)
+right_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model, critic_action_input=critic_action_input,
+                        memory=right_memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
+                        random_process=right_random_process, gamma=.99, target_model_update=1e-3)
+right_agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
+
+memory = SequentialMemory(limit=50000, window_length=1)
+policy = BoltzmannQPolicy()
+dqn = DQNAgent4Hrl(model=upper_model, turn_left_agent=left_agent, go_straight_agent=straight_agent,
+                   turn_right_agent=right_agent, nb_actions=upper_nb_actions, memory=memory, nb_steps_warmup=10,
+                   target_model_update=1e-2, policy=policy, enable_double_dqn=True)
+dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+
+# Okay, now it's time to learn something! We visualize the training here for show, but this
+# slows down training quite a lot. You can always safely abort the training prematurely using
+# Ctrl + C.
+dqn.fit(env, nb_steps=50000, visualize=True, verbose=2)
+
+# After training is done, we save the final weights.
+dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
+
+# Finally, evaluate our algorithm for 5 episodes.
+dqn.test(env, nb_episodes=5, visualize=True)

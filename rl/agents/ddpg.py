@@ -225,9 +225,9 @@ class DDPGAgent(Agent):
 
     def backward(self, reward, terminal=False):
         # Store most recent experience in memory.
-        if self.step % self.memory_interval == 0:
-            self.memory.append(self.recent_observation, self.recent_action, reward, terminal,
-                               training=self.training)
+        # if self.step % self.memory_interval == 0:
+        #     self.memory.append(self.recent_observation, self.recent_action, reward, terminal,
+        #                        training=self.training)
 
         metrics = [np.nan for _ in self.metrics_names]
         if not self.training:
