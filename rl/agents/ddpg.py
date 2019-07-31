@@ -188,6 +188,12 @@ class DDPGAgent(Agent):
             return batch
         return self.processor.process_state_batch(batch)
 
+    def process_reward_batch(self, batch):
+        batch = np.array(batch)
+        if self.processor is None:
+            return batch
+        return self.processor.process_reward_batch(batch)
+
     def select_action(self, state):
         batch = self.process_state_batch([state])
         action = self.actor.predict_on_batch(batch).flatten()
@@ -258,7 +264,7 @@ class DDPGAgent(Agent):
             state0_batch = self.process_state_batch(state0_batch)
             state1_batch = self.process_state_batch(state1_batch)
             terminal1_batch = np.array(terminal1_batch)
-            reward_batch = np.array(reward_batch)
+            reward_batch = self.process_reward_batch(reward_batch)
             action_batch = np.array(action_batch)
             assert reward_batch.shape == (self.batch_size,)
             assert terminal1_batch.shape == reward_batch.shape

@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.python.keras.models import model_from_config, Sequential, Model, model_from_config
 import tensorflow.python.keras.optimizers as optimizers
+import pickle
 
 
 
@@ -11,7 +12,7 @@ def clone_model(model, custom_objects={}):
         'class_name': model.__class__.__name__,
         'config': model.get_config(),
     }
-    clone = model_from_config(config, custom_objects=custom_objects)
+    clone = model_from_config(config)
     clone.set_weights(model.get_weights())
     return clone
 
@@ -106,6 +107,17 @@ class WhiteningNormalizer(object):
 
         self.mean = np.zeros(shape, dtype=dtype)
         self.std = np.ones(shape, dtype=dtype)
+
+    def load_param(self, filepath):
+        list_to_be_load = []
+        with open(filepath, 'rb') as f:
+            list_to_be_load = pickle.load(f)
+        self.shape, self.dtype, self._sum, self._sumsq, self._count, self.mean, self.std = list_to_be_load
+
+    def save_param(self, filepath):
+        list_to_be_saved = [self.shape, self.dtype, self._sum, self._sumsq, self._count, self.mean, self.std]
+        with open(filepath, 'wb') as f:
+            pickle.dump(list_to_be_saved, f)
 
     def normalize(self, x):
         return (x - self.mean) / self.std

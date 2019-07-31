@@ -9,7 +9,7 @@ from tensorflow.python.keras.callbacks import History
 import tensorflow as tf
 # import keras.backend as K
 # from keras.layers import Lambda, Input, Layer, Dense
-
+from rl.util import WhiteningNormalizer
 from rl.core import Agent
 from rl.policy import EpsGreedyQPolicy, GreedyQPolicy
 from rl.util import *
@@ -18,7 +18,8 @@ from rl.callbacks import (
     TestLogger,
     TrainEpisodeLogger,
     TrainIntervalLogger,
-    Visualizer
+    Visualizer,
+    ModelIntervalCheckpoint
 )
 
 
@@ -70,6 +71,12 @@ class AbstractDQNAgent(Agent):
         if self.processor is None:
             return batch
         return self.processor.process_state_batch(batch)
+
+    def process_reward_batch(self, batch):
+        batch = np.array(batch)
+        if self.processor is None:
+            return batch
+        return self.processor.process_reward_batch(batch)
 
     def compute_batch_q_values(self, state_batch):
         batch = self.process_state_batch(state_batch)
@@ -222,6 +229,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.compiled = True
 
     def load_weights(self, filepath):
+        # load models weights
         self.model.load_weights(filepath)
         self.update_target_model_hard()
         filename, extension = os.path.splitext(filepath)
@@ -231,8 +239,18 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.turn_left_agent.load_weights(left_model_filepath)
         self.go_straight_agent.load_weights(straight_model_filepath)
         self.turn_right_agent.load_weights(right_model_filepath)
+        # load state processor
+        upper_processor_filepath = filename + '.pickle'
+        left_processor_filepath = filename + '_left_model' + '.pickle'
+        straight_processor_filepath = filename + '_straight_model' + '.pickle'
+        right_processor_filepath = filename + '_right_model' + '.pickle'
+        self.processor.normalizer.load_param(upper_processor_filepath)
+        self.turn_left_agent.processor.normalizer.load_param(left_processor_filepath)
+        self.go_straight_agent.processor.normalizer.load_param(straight_processor_filepath)
+        self.turn_right_agent.processor.normalizer.load_param(right_processor_filepath)
 
-    def save_weights(self, filepath, overwrite=False):
+    def save_weights(self, filepath, overwrite=True):
+        # save models weights
         self.model.save_weights(filepath, overwrite=overwrite)
         filename, extension = os.path.splitext(filepath)
         left_model_filepath = filename + '_left_model' + extension
@@ -241,6 +259,15 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.turn_left_agent.save_weights(left_model_filepath, overwrite=overwrite)
         self.go_straight_agent.save_weights(straight_model_filepath, overwrite=overwrite)
         self.turn_right_agent.save_weights(right_model_filepath, overwrite=overwrite)
+        # save state processor
+        upper_processor_filepath = filename + '.pickle'
+        left_processor_filepath = filename + '_left_model' + '.pickle'
+        straight_processor_filepath = filename + '_straight_model' + '.pickle'
+        right_processor_filepath = filename + '_right_model' + '.pickle'
+        self.processor.normalizer.save_param(upper_processor_filepath)
+        self.turn_left_agent.processor.normalizer.save_param(left_processor_filepath)
+        self.go_straight_agent.processor.normalizer.save_param(straight_processor_filepath)
+        self.turn_right_agent.processor.normalizer.save_param(right_processor_filepath)
 
     def reset_states(self):
         self.recent_action = None
@@ -278,7 +305,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.recent_observation = observation
         self.recent_action = upper_action
 
-        return lower_action
+        return [upper_action, lower_action]
 
     def backward(self, reward, terminal):
         # Store most recent experience in memory.
@@ -330,7 +357,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             state0_batch = self.process_state_batch(state0_batch)
             state1_batch = self.process_state_batch(state1_batch)
             terminal1_batch = np.array(terminal1_batch)
-            reward_batch = np.array(reward_batch)
+            reward_batch = self.process_reward_batch(reward_batch)
             assert reward_batch.shape == (self.batch_size,)
             assert terminal1_batch.shape == reward_batch.shape
             assert len(action_batch) == len(reward_batch)
@@ -392,8 +419,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         return metrics
 
-    def fit_hrl(self, env, nb_steps, start_step_policy, action_repetition=1, callbacks=None, verbose=1,
-            visualize=False, warm_steps=3000, log_interval=10000,
+    def fit_hrl(self, env, nb_steps, random_start_step_policy, action_repetition=1, callbacks=None, verbose=1,
+            visualize=False, warm_steps=300, log_interval=100, save_interval=100,
             nb_max_episode_steps=None):
         """Trains the agent on the given environment.
 
@@ -438,21 +465,18 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             callbacks += [TrainEpisodeLogger()]
         if visualize:
             callbacks += [Visualizer()]
+        callbacks += [ModelIntervalCheckpoint(filepath='../checkpoints/model_step{step}.h5f',
+                                              interval=save_interval,
+                                              verbose=1)]
         history = History()
         callbacks += [history]
         callbacks = CallbackList(callbacks)
-        if hasattr(callbacks, 'set_model'):
-            callbacks.set_model(self)
-        else:
-            callbacks._set_model(self)
+        callbacks.set_model(self)
         callbacks._set_env(env)
         params = {
             'nb_steps': nb_steps,
         }
-        if hasattr(callbacks, 'set_params'):
-            callbacks.set_params(params)
-        else:
-            callbacks._set_params(params)
+        callbacks.set_params(params)
         self._on_train_begin()
         callbacks.on_train_begin()
 
@@ -465,11 +489,12 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         # warm steps
         for _ in range(warm_steps):
-            action = start_step_policy(observation)
-            if self.processor is not None:
-                action = self.processor.process_action(action)  # [0/1/2, goal_delta_x, acc]
+            action = random_start_step_policy()
             recent_action = action
             recent_observation = observation
+            if self.processor is not None:
+                action = self.processor.process_action(action)  # [0/1/2, goal_delta_x, acc]
+
             callbacks.on_action_begin(action)
             observation, reward, done, info = env.step(action)
             observation = deepcopy(observation)
@@ -479,13 +504,13 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
             self.memory.append(recent_observation, recent_action[0], reward, done,
                                training=self.training)
-            if self.recent_action == 0:
+            if self.recent_action[0] == 0:
                 left_obs = recent_observation[:, :30] + recent_observation[:, -8:] + np.tile(np.array([1, 0, 0]), (
                     recent_observation.shape[0], 1))  # 30 + 8 + 3 = 41
                 lower_action = recent_action[1:]
                 self.turn_left_agent.memory.append(left_obs, lower_action, reward, 1,
                                                    training=self.training)
-            elif self.recent_action == 1:
+            elif self.recent_action[0] == 1:
                 straight_obs = deepcopy(recent_observation) + np.tile(np.array([0, 1, 0]),
                                                                       (recent_observation.shape[0], 1))  # 56 + 3 = 59
                 lower_action = recent_action[1:]

@@ -54,3 +54,15 @@ class WhiteningNormalizerProcessor(Processor):
             self.normalizer = WhiteningNormalizer(shape=batch.shape[1:], dtype=batch.dtype)
         self.normalizer.update(batch)
         return self.normalizer.normalize(batch)
+
+    def process_action(self, action):
+        upper_action, (delta_x_norm, acc_norm) = action
+        delta_x = np.clip((delta_x_norm + 1) / 2 * 50 + 10, 10, 60)
+        acc = np.clip(acc_norm * 3, -3, 3)
+
+        return upper_action, delta_x, acc
+
+    @staticmethod
+    def process_reward_batch(batch):
+        return batch / 100
+

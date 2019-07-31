@@ -1,5 +1,7 @@
 import numpy as np
 import gym
+import os
+from gym.wrappers import ObservationWrapper
 import tensorflow as tf
 from tensorflow.python import keras
 from tensorflow.python.keras import layers, Model, Sequential, Input
@@ -13,23 +15,22 @@ from rl.random import OrnsteinUhlenbeckProcess
 from rl.agents.ddpg import DDPGAgent
 from rl.processors import WhiteningNormalizerProcessor
 
-
-# ENV_NAME = 'AutonomousDriving-v0'
-#
-#
-# # Get the environment and extract the number of actions.
-# env = gym.make(ENV_NAME)
-# np.random.seed(123)
-# env.seed(123)
-# nb_actions = env.action_space.n
 upper_nb_actions = 3
 lower_nb_actions = 2
 TIME_STEPS = 10
-TBD_total = 7
-TBD_left = 7
-TBD_straight = 7
-TBD_right = 7
+TBD_left = 38
+TBD_straight = 56
+TBD_right = 38
 LSTM_HIDDEN = 128
+ENV_NAME = 'EndtoendEnv-v0'
+# Get the environment and extract the number of actions.
+current_path = os.path.dirname(__file__)
+env = gym.make(ENV_NAME, setting_path=current_path + '/rl/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
+env = ObservationWrapper(env)
+# np.random.seed(123)
+# env.seed(123)
+# nb_actions = env.action_space.n
+
 
 def build_models():
     # build upper model.
@@ -45,9 +46,10 @@ def build_models():
     dense_indicator_input = Input(shape=(3,))
     dense_input = layers.concatenate([dense_lstm_input, dense_indicator_input])
     h = layers.Dense(32)(dense_input)
-    prob_output = layers.Dense(1, activation='sigmoid')(h)
-    vel_output = layers.Dense(1, activation='relu')(h)
-    out = layers.concatenate([prob_output, vel_output], axis=1)
+    # prob_output = layers.Dense(1, activation='sigmoid')(h)
+    # vel_output = layers.Dense(1, activation='relu')(h)
+    # out = layers.concatenate([prob_output, vel_output], axis=1)
+    out = layers.Dense(2, activation='tanh')(h)
     actor_dense_model = Model(inputs=[dense_lstm_input, dense_indicator_input],
                               outputs=out, name='shared_actor_dense_model')
 
@@ -133,6 +135,12 @@ def build_models():
                       right_actor_model=right_actor_model,
                       right_critic_model=right_critic_model)
     return model_dict, action_input
+def action_fn():
+    upper_action = np.random.choice([0, 1, 2])
+    delta_x_norm = (np.random.random() - 0.5) * 2
+    acc_norm = (np.random.random() - 0.5) * 2
+
+    return upper_action, (delta_x_norm, acc_norm)
 
 model_dict, critic_action_input = build_models()
 upper_model = model_dict['upper_model']
@@ -146,13 +154,13 @@ straight_critic_model = model_dict['straight_critic_model']
 right_actor_model = model_dict['right_actor_model']
 right_critic_model = model_dict['right_critic_model']
 
-print(left_actor_model.input, left_critic_model.input)
-print(right_actor_model.input, right_critic_model.input)
-print(left_critic_model.input.index(critic_action_input))
+# print(left_actor_model.input, left_critic_model.input)
+# print(right_actor_model.input, right_critic_model.input)
+# print(left_critic_model.input.index(critic_action_input))
 
 
 
-
+#
 # tf.keras.utils.plot_model(left_actor_model, 'left_actor_model_with_shape_info.png', show_shapes=True)
 # tf.keras.utils.plot_model(straight_actor_model, 'straight_actor_model_with_shape_info.png', show_shapes=True)
 # tf.keras.utils.plot_model(right_actor_model, 'right_actor_model_with_shape_info.png', show_shapes=True)
@@ -183,33 +191,36 @@ OPTIMIZER_LR_UPPER = 0.001
 
 
 # turn left agent
-processor = WhiteningNormalizerProcessor()
+left_processor = WhiteningNormalizerProcessor()
 left_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
 left_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
-left_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model,
+left_agent = DDPGAgent(processor=left_processor, nb_actions=lower_nb_actions, actor=left_actor_model,
                        critic=left_critic_model, critic_action_input=critic_action_input,
                        memory=left_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
                        random_process=left_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
 left_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # go straight agent
+straight_processor = WhiteningNormalizerProcessor()
 straight_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
 straight_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
-straight_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model,
+straight_agent = DDPGAgent(processor=straight_processor, nb_actions=lower_nb_actions, actor=left_actor_model,
                            critic=left_critic_model, critic_action_input=critic_action_input,
                            memory=straight_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
                            random_process=straight_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
 straight_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # turn right agent
+right_processor = WhiteningNormalizerProcessor()
 right_memory = SequentialMemory(limit=MEMORY_LIMIT, window_length=WINDOW_LENGTH)
 right_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RANDOM_PROCESS_THETA, mu=RANDOM_PROCESS_MU, sigma=RANDOM_PROCESS_SIGMA)
-right_agent = DDPGAgent(nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model,
+right_agent = DDPGAgent(processor=right_processor, nb_actions=lower_nb_actions, actor=left_actor_model, critic=left_critic_model,
                         critic_action_input=critic_action_input,
                         memory=right_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
                         random_process=right_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
 right_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
+processor = WhiteningNormalizerProcessor()
 memory = SequentialMemory(limit=MEMORY_LIMIT_UPPER, window_length=WINDOW_LENGTH_UPPER)
 policy = BoltzmannQPolicy()
 dqn = DQNAgent4Hrl(processor=processor, model=upper_model, turn_left_agent=left_agent, go_straight_agent=straight_agent,
@@ -220,7 +231,7 @@ dqn.compile(Adam(lr=OPTIMIZER_LR_UPPER), metrics=['mae'])
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-dqn.fit_hrl(env, nb_steps=50000, visualize=True, verbose=2)
+dqn.fit_hrl(env, nb_steps=50000, visualize=True, verbose=2, random_start_step_policy=action_fn)
 
 # After training is done, we save the final weights.
 dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
