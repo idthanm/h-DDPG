@@ -123,12 +123,6 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                  dueling_type='avg', *args, **kwargs):
         super(DQNAgent4Hrl, self).__init__(*args, **kwargs)
 
-        # Validate (important) input.
-        if hasattr(model.output, '__len__') and len(model.output) > 1:
-            raise ValueError('Model "{}" has more than one output. DQN expects a model that has a single output.'.format(model))
-        if model.output._keras_shape != (None, self.nb_actions):
-            raise ValueError('Model output "{}" has invalid shape. DQN expects a model that has one dimension for each action, in this case {}.'.format(model.output, self.nb_actions))
-
         # Parameters.
         self.enable_double_dqn = enable_double_dqn
         self.enable_dueling_network = enable_dueling_network
@@ -244,6 +238,14 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         left_processor_filepath = filename + '_left_model' + '.pickle'
         straight_processor_filepath = filename + '_straight_model' + '.pickle'
         right_processor_filepath = filename + '_right_model' + '.pickle'
+        if not self.processor.normalizer:
+            self.processor.normalizer = WhiteningNormalizer(shape=(10, 56))
+        if not self.turn_left_agent.processor.normalizer:
+            self.turn_left_agent.processor.normalizer = WhiteningNormalizer(shape=(10, 41))
+        if not self.go_straight_agent.processor.normalizer:
+            self.go_straight_agent.processor.normalizer = WhiteningNormalizer(shape=(10, 59))
+        if not self.turn_right_agent.processor.normalizer:
+            self.turn_right_agent.processor.normalizer = WhiteningNormalizer(shape=(10, 41))
         self.processor.normalizer.load_param(upper_processor_filepath)
         self.turn_left_agent.processor.normalizer.load_param(left_processor_filepath)
         self.go_straight_agent.processor.normalizer.load_param(straight_processor_filepath)
@@ -264,10 +266,14 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         left_processor_filepath = filename + '_left_model' + '.pickle'
         straight_processor_filepath = filename + '_straight_model' + '.pickle'
         right_processor_filepath = filename + '_right_model' + '.pickle'
-        self.processor.normalizer.save_param(upper_processor_filepath)
-        self.turn_left_agent.processor.normalizer.save_param(left_processor_filepath)
-        self.go_straight_agent.processor.normalizer.save_param(straight_processor_filepath)
-        self.turn_right_agent.processor.normalizer.save_param(right_processor_filepath)
+        if self.processor.normalizer:
+            self.processor.normalizer.save_param(upper_processor_filepath)
+        if self.turn_left_agent.processor.normalizer:
+            self.turn_left_agent.processor.normalizer.save_param(left_processor_filepath)
+        if self.go_straight_agent.processor.normalizer:
+            self.go_straight_agent.processor.normalizer.save_param(straight_processor_filepath)
+        if self.turn_right_agent.processor.normalizer:
+            self.turn_right_agent.processor.normalizer.save_param(right_processor_filepath)
 
     def reset_states(self):
         self.recent_action = None
@@ -275,9 +281,9 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         if self.compiled:
             self.model.reset_states()
             self.target_model.reset_states()
-        self.turn_left_agent.reset_state()
-        self.go_straight_agent.reset_state()
-        self.turn_right_agent.reset_state()
+        self.turn_left_agent.reset_states()
+        self.go_straight_agent.reset_states()
+        self.turn_right_agent.reset_states()
 
     def update_target_model_hard(self):
         self.target_model.set_weights(self.model.get_weights())
@@ -292,13 +298,13 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             upper_action = self.test_policy.select_action(q_values=q_values)
 
         if upper_action == 0:  # left
-            left_obs = observation[:, :30] + observation[:, -8:] + np.tile(np.array([1, 0, 0]), (observation.shape[0], 1))  # 30 + 8 + 3 = 41
+            left_obs = np.column_stack((observation[:, :30], observation[:, -8:], np.tile(np.array([1, 0, 0]), (observation.shape[0], 1)))) # 30 + 8 + 3 = 41
             lower_action = self.turn_left_agent.forward(left_obs)  # lower_action = [goal_delta_x, acc]
         elif upper_action == 1:  # go_straight
-            straight_obs = deepcopy(observation) + np.tile(np.array([0, 1, 0]), (observation.shape[0], 1))  # 56 + 3 = 59
+            straight_obs = np.column_stack((deepcopy(observation), np.tile(np.array([0, 1, 0]), (observation.shape[0], 1))))  # 56 + 3 = 59
             lower_action = self.go_straight_agent.forward(straight_obs)
         else:
-            right_obs = observation[:, 18:] + np.tile(np.array([0, 0, 1]), (observation.shape[0], 1))  # 56- 18 + 3 = 41
+            right_obs = np.column_stack((observation[:, 18:], np.tile(np.array([0, 0, 1]), (observation.shape[0], 1))))  # 56- 18 + 3 = 41
             lower_action = self.turn_right_agent.forward(right_obs)
 
         # Book-keeping.
@@ -419,8 +425,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         return metrics
 
-    def fit_hrl(self, env, nb_steps, random_start_step_policy, action_repetition=1, callbacks=None, verbose=1,
-            visualize=False, warm_steps=300, log_interval=100, save_interval=100,
+    def fit_hrl(self, env, nb_steps, random_start_step_policy, callbacks=None, verbose=1,
+            visualize=False, warm_steps=0, log_interval=100, save_interval=1,
             nb_max_episode_steps=None):
         """Trains the agent on the given environment.
 
@@ -451,9 +457,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             A `keras.callbacks.History` instance that recorded the entire training process.
         """
         if not self.compiled:
-            raise RuntimeError('Your tried to fit your agent but it hasn\'t been compiled yet. Please call `compile()` before `fit()`.')
-        if action_repetition < 1:
-            raise ValueError('action_repetition must be >= 1, is {}'.format(action_repetition))
+            raise RuntimeError('Your tried to fit your agent but it hasn\'t been'
+                               ' compiled yet. Please call `compile()` before `fit()`.')
 
         self.training = True
 
@@ -465,7 +470,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             callbacks += [TrainEpisodeLogger()]
         if visualize:
             callbacks += [Visualizer()]
-        callbacks += [ModelIntervalCheckpoint(filepath='../checkpoints/model_step{step}.h5f',
+        parent_dir = os.path.dirname(os.path.dirname(__file__))
+        callbacks += [ModelIntervalCheckpoint(filepath=parent_dir + '/checkpoints/model_step{step}.h5f',
                                               interval=save_interval,
                                               verbose=1)]
         history = History()
@@ -482,7 +488,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         episode = np.int16(0)
         self.step = np.int16(0)
-        observation = None
+        observation = env.encoded_obs
         episode_reward = None
         episode_step = None
         did_abort = False
@@ -504,21 +510,21 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
             self.memory.append(recent_observation, recent_action[0], reward, done,
                                training=self.training)
-            if self.recent_action[0] == 0:
-                left_obs = recent_observation[:, :30] + recent_observation[:, -8:] + np.tile(np.array([1, 0, 0]), (
-                    recent_observation.shape[0], 1))  # 30 + 8 + 3 = 41
+            if recent_action[0] == 0:
+                left_obs = np.column_stack((recent_observation[:, :30], recent_observation[:, -8:], np.tile(np.array([1, 0, 0]), (
+                    recent_observation.shape[0], 1))))  # 30 + 8 + 3 = 41
                 lower_action = recent_action[1:]
                 self.turn_left_agent.memory.append(left_obs, lower_action, reward, 1,
                                                    training=self.training)
-            elif self.recent_action[0] == 1:
-                straight_obs = deepcopy(recent_observation) + np.tile(np.array([0, 1, 0]),
-                                                                      (recent_observation.shape[0], 1))  # 56 + 3 = 59
+            elif recent_action[0] == 1:
+                straight_obs = np.column_stack((deepcopy(recent_observation), np.tile(np.array([0, 1, 0]),
+                                                                      (recent_observation.shape[0], 1)))) # 56 + 3 = 59
                 lower_action = recent_action[1:]
                 self.go_straight_agent.memory.append(straight_obs, lower_action, reward, 1,
                                                      training=self.training)
             else:
-                right_obs = recent_observation[:, 18:] + np.tile(np.array([0, 0, 1]),
-                                                                 (recent_observation.shape[0], 1))  # 56- 18 + 3 = 41
+                right_obs = np.column_stack((recent_observation[:, 18:], np.tile(np.array([0, 0, 1]),
+                                                                 (recent_observation.shape[0], 1))))  # 56- 18 + 3 = 41
                 lower_action = recent_action[1:]
                 self.turn_right_agent.memory.append(right_obs, lower_action, reward, 1,
                                                     training=self.training)
@@ -527,6 +533,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 observation = deepcopy(env.reset())
                 if self.processor is not None:
                     observation = self.processor.process_observation(observation)
+
+        observation = None
 
         try:
             while self.step < nb_steps:
@@ -537,7 +545,19 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
                     # Obtain the initial observation by resetting the environment.
                     self.reset_states()
-                    observation = deepcopy(env.reset())
+                    def random_init_state(flag=True):
+                        init_state = [-800, -150-3.75*5/2, 5, 0]
+                        if flag:
+                            x = np.random.random() * 1000 - 800
+                            lane = np.random.choice([0, 1, 2, 3])
+                            y_fn = lambda lane: [-150-3.75*7/2, -150-3.75*5/2, -150-3.75*3/2, -150-3.75*1/2][lane]
+                            y = y_fn(lane)
+                            v = np.random.random() * 25
+                            heading = 0
+                            init_state = [x, y, v, heading]
+                        return init_state
+
+                    observation = deepcopy(env.reset(init_state=random_init_state(flag=True)))
                     if self.processor is not None:
                         observation = self.processor.process_observation(observation)
                     assert observation is not None
@@ -554,25 +574,15 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 action = self.forward(observation)
                 if self.processor is not None:
                     action = self.processor.process_action(action)
-                reward = np.float32(0)
-                accumulated_info = {}
                 done = False
-                for _ in range(action_repetition):
-                    callbacks.on_action_begin(action)
-                    observation, r, done, info = env.step(action)
-                    observation = deepcopy(observation)
-                    if self.processor is not None:
-                        observation, r, done, info = self.processor.process_step(observation, r, done, info)
-                    for key, value in info.items():
-                        if not np.isreal(value):
-                            continue
-                        if key not in accumulated_info:
-                            accumulated_info[key] = np.zeros_like(value)
-                        accumulated_info[key] += value
-                    callbacks.on_action_end(action)
-                    reward += r
-                    if done:
-                        break
+
+                callbacks.on_action_begin(action)
+                observation, reward, done, info = env.step(action)
+                observation = deepcopy(observation)
+                if self.processor is not None:
+                    observation, reward, done, info = self.processor.process_step(observation, reward, done, info)
+                callbacks.on_action_end(action)
+
                 if nb_max_episode_steps and episode_step >= nb_max_episode_steps - 1:
                     # Force a terminal state.
                     done = True
@@ -585,7 +595,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                     'reward': reward,
                     'metrics': metrics,
                     'episode': episode,
-                    'info': accumulated_info,
+                    # 'info': info,
                 }
                 callbacks.on_step_end(episode_step, step_logs)
                 episode_step += 1
