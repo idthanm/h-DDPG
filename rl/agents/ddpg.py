@@ -145,7 +145,7 @@ class DDPGAgent(Agent):
 
         # Finally, combine it all into a callable function.
         self.actor_train_fn = K.function(state_inputs + [K.learning_phase()],
-                                             [self.actor(state_inputs)], updates=updates)
+                                         [self.actor(state_inputs)], updates=updates)
         self.actor_optimizer = actor_optimizer
 
         self.compiled = True
@@ -306,8 +306,8 @@ class DDPGAgent(Agent):
                     inputs = state0_batch[:]
                 else:
                     inputs = [state0_batch]
-                if self.uses_learning_phase:
-                    inputs += [self.training]
+                # if self.uses_learning_phase:
+                #     inputs += [self.training]
                 action_values = self.actor_train_fn(inputs)[0]
                 assert action_values.shape == (self.batch_size, self.nb_actions)
 

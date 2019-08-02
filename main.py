@@ -145,7 +145,7 @@ def action_fn():
     delta_x_norm = (np.random.random() - 0.5) * 2
     acc_norm = (np.random.random() - 0.5) * 2
 
-    return upper_action, (delta_x_norm, acc_norm)
+    return [upper_action, delta_x_norm, acc_norm]
 
 model_dict, critic_action_input = build_models()
 upper_model = model_dict['upper_model']
@@ -177,12 +177,19 @@ right_critic_model = model_dict['right_critic_model']
 # tf.keras.utils.plot_model(straight_critic_model, 'straight_critic_model_with_shape_info.png', show_shapes=True)
 # tf.keras.utils.plot_model(right_critic_model, 'right_critic_model_with_shape_info.png', show_shapes=True)
 
+# define hyperparameter for DQN4Hrl
+MEMORY_LIMIT_UPPER = 10000
+WINDOW_LENGTH_UPPER = 1
+NB_STEPS_WARMUP_STEP = 10
+TARGET_MODEL_UPDATE_UPPER = 1e-2
+OPTIMIZER_LR_UPPER = 0.001
+BATCH_SIZE_UPPER = 32
 
 # define hyperparameter for DDPG agent
-MEMORY_LIMIT = 100000
+MEMORY_LIMIT = 50000
 WINDOW_LENGTH = 1
-NB_STEPS_WARMUP_CRITIC = 40
-NB_STEPS_WARMUP_ACTOR = 40
+NB_STEPS_WARMUP_CRITIC = NB_STEPS_WARMUP_STEP
+NB_STEPS_WARMUP_ACTOR = NB_STEPS_WARMUP_STEP
 GAMMA = 0.99
 TARGET_MODEL_UPDATE = 1e-3
 RANDOM_PROCESS_THETA = 0.15
@@ -190,13 +197,15 @@ RANDOM_PROCESS_MU = 0.
 RANDOM_PROCESS_SIGMA = 0.3
 OPTIMIZER_LR = 0.001
 OPTIMIZER_CLIPNORM = 1.0
+BATCH_SIZE_LOWER = 32
 
-# define hyperparameter for DQN4Hrl
-MEMORY_LIMIT_UPPER = 50000
-WINDOW_LENGTH_UPPER = 1
-NB_STEPS_WARMUP_STEP = 100
-TARGET_MODEL_UPDATE_UPPER = 1e-2
-OPTIMIZER_LR_UPPER = 0.001
+
+# define hyperparameter for training
+NB_STEPS = 50000
+PRE_WARM_STEP = 10
+SAVE_INTERVAL = 200
+
+
 
 
 # turn left agent
@@ -206,7 +215,8 @@ left_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RAND
 left_agent = DDPGAgent(processor=left_processor, nb_actions=lower_nb_actions, actor=left_actor_model,
                        critic=left_critic_model, critic_action_input=critic_action_input,
                        memory=left_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
-                       random_process=left_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+                       random_process=left_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE,
+                       batch_size=BATCH_SIZE_LOWER)
 left_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # go straight agent
@@ -216,7 +226,8 @@ straight_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=
 straight_agent = DDPGAgent(processor=straight_processor, nb_actions=lower_nb_actions, actor=straight_actor_model,
                            critic=straight_critic_model, critic_action_input=critic_action_input,
                            memory=straight_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
-                           random_process=straight_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+                           random_process=straight_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE,
+                           batch_size=BATCH_SIZE_LOWER)
 straight_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 # turn right agent
@@ -226,7 +237,8 @@ right_random_process = OrnsteinUhlenbeckProcess(size=lower_nb_actions, theta=RAN
 right_agent = DDPGAgent(processor=right_processor, nb_actions=lower_nb_actions, actor=right_actor_model, critic=right_critic_model,
                         critic_action_input=critic_action_input,
                         memory=right_memory, nb_steps_warmup_critic=NB_STEPS_WARMUP_CRITIC, nb_steps_warmup_actor=NB_STEPS_WARMUP_ACTOR,
-                        random_process=right_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE)
+                        random_process=right_random_process, gamma=GAMMA, target_model_update=TARGET_MODEL_UPDATE,
+                        batch_size=BATCH_SIZE_LOWER)
 right_agent.compile(Adam(lr=OPTIMIZER_LR, clipnorm=OPTIMIZER_CLIPNORM), metrics=['mae'])
 
 processor = WhiteningNormalizerProcessor()
@@ -234,13 +246,14 @@ memory = SequentialMemory(limit=MEMORY_LIMIT_UPPER, window_length=WINDOW_LENGTH_
 policy = BoltzmannQPolicy()
 dqn = DQNAgent4Hrl(processor=processor, model=upper_model, turn_left_agent=left_agent, go_straight_agent=straight_agent,
                    turn_right_agent=right_agent, nb_actions=upper_nb_actions, memory=memory, nb_steps_warmup=NB_STEPS_WARMUP_STEP,
-                   target_model_update=TARGET_MODEL_UPDATE_UPPER, policy=policy, enable_double_dqn=True)
+                   target_model_update=TARGET_MODEL_UPDATE_UPPER, policy=policy, enable_double_dqn=True, batch_size=BATCH_SIZE_UPPER)
 dqn.compile(Adam(lr=OPTIMIZER_LR_UPPER), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-dqn.fit_hrl(env, nb_steps=50000, visualize=False, verbose=2, random_start_step_policy=action_fn, save_interval=100)
+dqn.fit_hrl(env, nb_steps=NB_STEPS, visualize=False, verbose=2, random_start_step_policy=action_fn,
+            save_interval=SAVE_INTERVAL, pre_warm_steps=PRE_WARM_STEP, nb_max_episode_steps=None)
 
 # # After training is done, we save the final weights.
 # dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)

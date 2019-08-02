@@ -19,7 +19,8 @@ from rl.callbacks import (
     TrainEpisodeLogger,
     TrainIntervalLogger,
     Visualizer,
-    ModelIntervalCheckpoint
+    ModelIntervalCheckpoint,
+    FileLogger
 )
 
 
@@ -311,7 +312,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.recent_observation = observation
         self.recent_action = upper_action
 
-        return [upper_action, lower_action]
+        return [upper_action, lower_action[0], lower_action[1]]
 
     def backward(self, reward, terminal):
         # Store most recent experience in memory.
@@ -331,10 +332,6 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                                                     self.turn_right_agent.recent_action, reward, 1,
                                                     training=self.training)
 
-        self.turn_left_agent.backward(reward, terminal)  # these parameters have no use
-        self.go_straight_agent.backward(reward, terminal)
-        self.turn_right_agent.backward(reward, terminal)
-
         metrics = [np.nan for _ in self.metrics_names]
         if not self.training:
             # We're done here. No need to update the experience memory since we only use the working
@@ -343,6 +340,9 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         # Train the network on a single stochastic batch.
         if self.step > self.nb_steps_warmup and self.step % self.train_interval == 0:
+            left_metrics = self.turn_left_agent.backward(0, 0)  # these parameters have no use
+            straight_metrics = self.go_straight_agent.backward(0, 0)
+            right_metrics = self.turn_right_agent.backward(0, 0)
             experiences = self.memory.sample(self.batch_size)
             assert len(experiences) == self.batch_size
 
@@ -419,6 +419,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             metrics += self.policy.metrics
             if self.processor is not None:
                 metrics += self.processor.metrics
+            metrics = metrics + left_metrics + straight_metrics + right_metrics
 
         if self.target_model_update >= 1 and self.step % self.target_model_update == 0:
             self.update_target_model_hard()
@@ -426,7 +427,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         return metrics
 
     def fit_hrl(self, env, nb_steps, random_start_step_policy, callbacks=None, verbose=1,
-            visualize=False, warm_steps=0, log_interval=100, save_interval=1,
+            visualize=False, pre_warm_steps=0, log_interval=100, save_interval=1,
             nb_max_episode_steps=None):
         """Trains the agent on the given environment.
 
@@ -461,6 +462,9 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                                ' compiled yet. Please call `compile()` before `fit()`.')
 
         self.training = True
+        self.turn_left_agent.training = True
+        self.go_straight_agent.training = True
+        self.turn_right_agent.training = True
 
         callbacks = [] if not callbacks else callbacks[:]
 
@@ -470,7 +474,9 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             callbacks += [TrainEpisodeLogger()]
         if visualize:
             callbacks += [Visualizer()]
+
         parent_dir = os.path.dirname(os.path.dirname(__file__))
+        callbacks += [FileLogger(filepath=parent_dir + '/log.json')]
         callbacks += [ModelIntervalCheckpoint(filepath=parent_dir + '/checkpoints/model_step{step}.h5f',
                                               interval=save_interval,
                                               verbose=1)]
@@ -494,12 +500,12 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         did_abort = False
 
         # warm steps
-        for _ in range(warm_steps):
-            action = random_start_step_policy()
-            recent_action = action
-            recent_observation = observation
-            if self.processor is not None:
-                action = self.processor.process_action(action)  # [0/1/2, goal_delta_x, acc]
+        print('pre warming up:')
+        for _ in range(pre_warm_steps):
+            normed_action= random_start_step_policy()
+            recent_action = normed_action
+            recent_observation = observation  # put in normed action and unprocessed observation
+            action = self.processor.process_action(recent_action)  # [0/1/2, goal_delta_x, acc]
 
             callbacks.on_action_begin(action)
             observation, reward, done, info = env.step(action)
@@ -528,9 +534,28 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 lower_action = recent_action[1:]
                 self.turn_right_agent.memory.append(right_obs, lower_action, reward, 1,
                                                     training=self.training)
+            print('————————————————————————————————————————————————————————————————')
+            print('upper_memory_len: ', self.memory.nb_entries)
+            print('left_memory_len: ', self.turn_left_agent.memory.nb_entries)
+            print('straight_memory_len: ', self.go_straight_agent.memory.nb_entries)
+            print('right_memory_len: ', self.turn_right_agent.memory.nb_entries)
+            print('————————————————————————————————————————————————————————————————')
             # TODO: always has a point is not done, but there would be only one bad point in the buffer
             if done:
-                observation = deepcopy(env.reset())
+                def random_init_state(flag=True):
+                    init_state = [-800, -150 - 3.75 * 5 / 2, 5, 0]
+                    if flag:
+                        x = np.random.random() * 1000 - 800
+                        lane = np.random.choice([0, 1, 2, 3])
+                        y_fn = lambda lane: \
+                        [-150 - 3.75 * 7 / 2, -150 - 3.75 * 5 / 2, -150 - 3.75 * 3 / 2, -150 - 3.75 * 1 / 2][lane]
+                        y = y_fn(lane)
+                        v = np.random.random() * 25
+                        heading = 0
+                        init_state = [x, y, v, heading]
+                    return init_state
+
+                observation = deepcopy(env.reset(init_state=random_init_state(flag=True)))
                 if self.processor is not None:
                     observation = self.processor.process_observation(observation)
 
@@ -571,9 +596,8 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 callbacks.on_step_begin(episode_step)
                 # This is were all of the work happens. We first perceive and compute the action
                 # (forward step) and then use the reward to improve (backward step).
-                action = self.forward(observation)
-                if self.processor is not None:
-                    action = self.processor.process_action(action)
+                action = self.forward(observation)  # this is normed action
+                action = self.processor.process_action(action)  # this is processed action for env
                 done = False
 
                 callbacks.on_action_begin(action)
@@ -589,14 +613,16 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 metrics = self.backward(reward, terminal=done)
                 episode_reward += reward
 
+
                 step_logs = {
-                    'action': action,
-                    'observation': observation,
+                    'action': action,  # processed action
+                    'observation': observation,  # true obs
                     'reward': reward,
                     'metrics': metrics,
-                    'episode': episode,
+                    'episode': episode
                     # 'info': info,
                 }
+
                 callbacks.on_step_end(episode_step, step_logs)
                 episode_step += 1
                 self.step += 1
@@ -604,11 +630,15 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 self.go_straight_agent.step += 1
                 self.turn_right_agent.step += 1
 
+                memory_len = [self.turn_left_agent.memory.nb_entries, self.go_straight_agent.memory.nb_entries,
+                              self.turn_right_agent.memory.nb_entries]
+
                 if done:
                     episode_logs = {
                         'episode_reward': episode_reward,
                         'nb_episode_steps': episode_step,
                         'nb_steps': self.step,
+                        'memory_len': memory_len
                     }
                     callbacks.on_episode_end(episode, episode_logs)
 
@@ -623,6 +653,140 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             did_abort = True
         callbacks.on_train_end(logs={'did_abort': did_abort})
         self._on_train_end()
+
+        return history
+
+    def test_hrl(self, env, nb_episodes=1, callbacks=None, visualize=True,
+             nb_max_episode_steps=None, nb_max_start_steps=0, start_step_policy=None, verbose=1):
+        """Callback that is called before training begins.
+
+        # Arguments
+            env: (`Env` instance): Environment that the agent interacts with. See [Env](#env) for details.
+            nb_episodes (integer): Number of episodes to perform.
+            action_repetition (integer): Number of times the agent repeats the same action without
+                observing the environment again. Setting this to a value > 1 can be useful
+                if a single action only has a very small effect on the environment.
+            callbacks (list of `keras.callbacks.Callback` or `rl.callbacks.Callback` instances):
+                List of callbacks to apply during training. See [callbacks](/callbacks) for details.
+            verbose (integer): 0 for no logging, 1 for interval logging (compare `log_interval`), 2 for episode logging
+            visualize (boolean): If `True`, the environment is visualized during training. However,
+                this is likely going to slow down training significantly and is thus intended to be
+                a debugging instrument.
+            nb_max_start_steps (integer): Number of maximum steps that the agent performs at the beginning
+                of each episode using `start_step_policy`. Notice that this is an upper limit since
+                the exact number of steps to be performed is sampled uniformly from [0, max_start_steps]
+                at the beginning of each episode.
+            start_step_policy (`lambda observation: action`): The policy
+                to follow if `nb_max_start_steps` > 0. If set to `None`, a random action is performed.
+            log_interval (integer): If `verbose` = 1, the number of steps that are considered to be an interval.
+            nb_max_episode_steps (integer): Number of steps per episode that the agent performs before
+                automatically resetting the environment. Set to `None` if each episode should run
+                (potentially indefinitely) until the environment signals a terminal state.
+
+        # Returns
+            A `keras.callbacks.History` instance that recorded the entire training process.
+        """
+        if not self.compiled:
+            raise RuntimeError('Your tried to test your agent but it hasn\'t been '
+                               'compiled yet. Please call `compile()` before `test()`.')
+
+        self.training = False
+        self.turn_left_agent.training = False
+        self.go_straight_agent.training = False
+        self.turn_right_agent.training = False
+        self.step = 0
+
+        callbacks = [] if not callbacks else callbacks[:]
+
+        if verbose >= 1:
+            callbacks += [TestLogger()]
+        if visualize:
+            callbacks += [Visualizer()]
+        history = History()
+        callbacks += [history]
+        callbacks = CallbackList(callbacks)
+        callbacks.set_model(self)
+        callbacks._set_env(env)
+        params = {
+            'nb_episodes': nb_episodes,
+        }
+        callbacks.set_params(params)
+        self._on_test_begin()
+        callbacks.on_train_begin()
+        for episode in range(nb_episodes):
+            callbacks.on_episode_begin(episode)
+            episode_reward = 0.
+            episode_step = 0
+
+            # Obtain the initial observation by resetting the environment.
+            self.reset_states()
+
+            def random_init_state(flag=True):
+                init_state = [-800, -150 - 3.75 * 5 / 2, 5, 0]
+                if flag:
+                    x = np.random.random() * 1000 - 800
+                    lane = np.random.choice([0, 1, 2, 3])
+                    y_fn = lambda lane: \
+                    [-150 - 3.75 * 7 / 2, -150 - 3.75 * 5 / 2, -150 - 3.75 * 3 / 2, -150 - 3.75 * 1 / 2][lane]
+                    y = y_fn(lane)
+                    v = np.random.random() * 25
+                    heading = 0
+                    init_state = [x, y, v, heading]
+                return init_state
+
+            observation = deepcopy(env.reset(init_state=random_init_state(flag=True)))
+            if self.processor is not None:
+                observation = self.processor.process_observation(observation)
+            assert observation is not None
+
+            # Run the episode until we're done.
+            done = False
+            while not done:
+                callbacks.on_step_begin(episode_step)
+
+                action = self.forward(observation)
+                if self.processor is not None:
+                    action = self.processor.process_action(action)
+                reward = 0.
+                accumulated_info = {}
+                callbacks.on_action_begin(action)
+                observation, reward, d, info = env.step(action)
+                observation = deepcopy(observation)
+                if self.processor is not None:
+                    observation, reward, d, info = self.processor.process_step(observation, reward, d, info)
+                callbacks.on_action_end(action)
+                if nb_max_episode_steps and episode_step >= nb_max_episode_steps - 1:
+                    done = True
+                self.backward(reward, terminal=done)
+                episode_reward += reward
+
+                step_logs = {
+                    'action': action,
+                    'observation': observation,
+                    'reward': reward,
+                    'episode': episode,
+                    'info': accumulated_info,
+                }
+                callbacks.on_step_end(episode_step, step_logs)
+                episode_step += 1
+                self.step += 1
+
+            # We are in a terminal state but the agent hasn't yet seen it. We therefore
+            # perform one more forward-backward call and simply ignore the action before
+            # resetting the environment. We need to pass in `terminal=False` here since
+            # the *next* state, that is the state of the newly reset environment, is
+            # always non-terminal by convention.
+            self.forward(observation)
+            self.backward(0., terminal=False)
+
+            # Report end of episode.
+            episode_logs = {
+                'episode_reward': episode_reward,
+                'nb_steps': episode_step,
+            }
+            callbacks.on_episode_end(episode, episode_logs)
+        callbacks.on_train_end()
+        self._on_test_end()
 
         return history
 
@@ -641,7 +805,10 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         names = model_metrics + self.policy.metrics_names[:]
         if self.processor is not None:
             names += self.processor.metrics_names[:]
-        return names
+        left_model_metrics = ['left_' + name for name in self.turn_left_agent.metrics_names]
+        straight_model_metrics = ['straight_' + name for name in self.go_straight_agent.metrics_names]
+        right_model_metrics = ['right_' + name for name in self.turn_right_agent.metrics_names]
+        return names + left_model_metrics + straight_model_metrics + right_model_metrics
 
     @property
     def policy(self):

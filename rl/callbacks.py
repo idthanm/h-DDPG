@@ -129,6 +129,7 @@ class TrainEpisodeLogger(Callback):
         self.actions = {}
         self.metrics = {}
         self.step = 0
+        self.memory_len = 0
 
     def on_train_begin(self, logs):
         """ Print training values at beginning of training """
@@ -151,6 +152,7 @@ class TrainEpisodeLogger(Callback):
 
     def on_episode_end(self, episode, logs):
         """ Compute and print training statistics of the episode when done """
+        self.memory_len = logs['memory_len']
         duration = timeit.default_timer() - self.episode_start[episode]
         episode_steps = len(self.observations[episode])
 
@@ -163,6 +165,8 @@ class TrainEpisodeLogger(Callback):
             for idx, name in enumerate(self.metrics_names):
                 if idx > 0:
                     metrics_template += ', '
+                if idx % 3 == 0:  # add this condition for the specific project
+                    metrics_template += '\n'
                 try:
                     value = np.nanmean(metrics[:, idx])
                     metrics_template += '{}: {:f}'
@@ -173,7 +177,15 @@ class TrainEpisodeLogger(Callback):
         metrics_text = metrics_template.format(*metrics_variables)
 
         nb_step_digits = str(int(np.ceil(np.log10(self.params['nb_steps']))) + 1)
-        template = '{step: ' + nb_step_digits + 'd}/{nb_steps}: episode: {episode}, duration: {duration:.3f}s, episode steps: {episode_steps}, steps per second: {sps:.0f}, episode reward: {episode_reward:.3f}, mean reward: {reward_mean:.3f} [{reward_min:.3f}, {reward_max:.3f}], mean action: {action_mean:.3f} [{action_min:.3f}, {action_max:.3f}], mean observation: {obs_mean:.3f} [{obs_min:.3f}, {obs_max:.3f}], {metrics}'
+        template = \
+            '\nstep/all_steps: {step:' + nb_step_digits + 'd}/{nb_steps}: \n' \
+            'episode: {episode}, duration: {duration:.3f}s, episode steps: {episode_steps}, steps per second: {sps:.0f}, \n' \
+            'episode reward: {episode_reward:.3f}, \n' \
+            'mean reward: {reward_mean:.3f} [{reward_min:.3f}, {reward_max:.3f}], \n' \
+            'mean action: {action_mean} [{action_min}, {action_max}], \n' \
+            'mean observation: {obs_mean} [{obs_min}, {obs_max}], \n' \
+            '{metrics}, \n' \
+            'memory len: {memory_len}'
         variables = {
             'step': self.step,
             'nb_steps': self.params['nb_steps'],
@@ -185,15 +197,19 @@ class TrainEpisodeLogger(Callback):
             'reward_mean': np.mean(self.rewards[episode]),
             'reward_min': np.min(self.rewards[episode]),
             'reward_max': np.max(self.rewards[episode]),
-            'action_mean': np.mean(self.actions[episode]),
-            'action_min': np.min(self.actions[episode]),
-            'action_max': np.max(self.actions[episode]),
+            'action_mean': np.mean(self.actions[episode], axis=0),
+            'action_min': np.min(self.actions[episode], axis=0),
+            'action_max': np.max(self.actions[episode], axis=0),
             'obs_mean': np.mean(self.observations[episode]),
             'obs_min': np.min(self.observations[episode]),
             'obs_max': np.max(self.observations[episode]),
             'metrics': metrics_text,
+            'memory_len': self.memory_len
         }
+        np.set_printoptions(precision=1, suppress=True)
+        print('——————————————————————————————————————————————————————————————————————————————————')
         print(template.format(**variables))
+        print('——————————————————————————————————————————————————————————————————————————————————')
 
         # Free up resources.
         del self.episode_start[episode]
@@ -209,6 +225,7 @@ class TrainEpisodeLogger(Callback):
         self.rewards[episode].append(logs['reward'])
         self.actions[episode].append(logs['action'])
         self.metrics[episode].append(logs['metrics'])
+        # print('______', logs['metrics'])
         self.step += 1
 
 
@@ -318,6 +335,9 @@ class FileLogger(Callback):
             mean_metrics = np.array([np.nan for _ in self.metrics_names])
         else:
             mean_metrics = np.nanmean(metrics, axis=0)
+        # print(metrics)
+        # print('mean_metrics', mean_metrics)
+        # print(self.metrics_names)
         assert len(mean_metrics) == len(self.metrics_names)
 
         data = list(zip(self.metrics_names, mean_metrics))
@@ -337,6 +357,7 @@ class FileLogger(Callback):
 
     def on_step_end(self, step, logs):
         """ Append metric at the end of each step """
+        # print('logs_metrics', logs['metrics'])
         self.metrics[logs['episode']].append(logs['metrics'])
 
     def save_data(self):

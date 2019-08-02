@@ -56,7 +56,7 @@ class WhiteningNormalizerProcessor(Processor):
         return self.normalizer.normalize(batch)
 
     def process_action(self, action):
-        upper_action, (delta_x_norm, acc_norm) = action
+        upper_action, delta_x_norm, acc_norm = action
         delta_x = np.clip((delta_x_norm + 1) / 2 * 50 + 10, 10, 60)
         acc = np.clip(acc_norm * 3, -3, 3)
 
