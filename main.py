@@ -1,7 +1,7 @@
 import numpy as np
 import gym
 import os
-from gym.wrappers import ObservationWrapper
+from LasVSim.endtoend import EndtoendEnv, ObservationWrapper
 import tensorflow as tf
 from tensorflow.python import keras
 from tensorflow.python.keras import layers, Model, Sequential, Input
@@ -14,6 +14,7 @@ from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 from rl.agents.ddpg import DDPGAgent
 from rl.processors import WhiteningNormalizerProcessor
+from rl.common.misc_util import set_global_seeds
 
 
 tf.compat.v1.disable_eager_execution()
@@ -27,13 +28,12 @@ TBD_straight = 56
 TBD_right = 38
 LSTM_HIDDEN = 128
 ENCODE_LSTM_HIDDEN = 64
-ENV_NAME = 'EndtoendEnv-v0'
 # Get the environment and extract the number of actions.
 current_path = os.path.dirname(__file__)
-env = gym.make(ENV_NAME, setting_path=current_path + '/rl/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
+env = EndtoendEnv(setting_path=current_path + '/LasVSim/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
 env = ObservationWrapper(env)
-# np.random.seed(123)
-# env.seed(123)
+set_global_seeds(42)  # set of seeds: [42, 0, 1, 2]
+env.seed(42)
 # nb_actions = env.action_space.n
 
 
@@ -178,9 +178,9 @@ right_critic_model = model_dict['right_critic_model']
 # tf.keras.utils.plot_model(right_critic_model, 'right_critic_model_with_shape_info.png', show_shapes=True)
 
 # define hyperparameter for DQN4Hrl
-MEMORY_LIMIT_UPPER = 10000
+MEMORY_LIMIT_UPPER = 50000
 WINDOW_LENGTH_UPPER = 1
-NB_STEPS_WARMUP_STEP = 10
+NB_STEPS_WARMUP_STEP = 128
 TARGET_MODEL_UPDATE_UPPER = 1e-2
 OPTIMIZER_LR_UPPER = 0.001
 BATCH_SIZE_UPPER = 32
@@ -188,8 +188,8 @@ BATCH_SIZE_UPPER = 32
 # define hyperparameter for DDPG agent
 MEMORY_LIMIT = 50000
 WINDOW_LENGTH = 1
-NB_STEPS_WARMUP_CRITIC = NB_STEPS_WARMUP_STEP
-NB_STEPS_WARMUP_ACTOR = NB_STEPS_WARMUP_STEP
+NB_STEPS_WARMUP_CRITIC = 50000
+NB_STEPS_WARMUP_ACTOR = 50000
 GAMMA = 0.99
 TARGET_MODEL_UPDATE = 1e-3
 RANDOM_PROCESS_THETA = 0.15
@@ -202,9 +202,13 @@ BATCH_SIZE_LOWER = 32
 
 # define hyperparameter for training
 NB_STEPS = 50000
-PRE_WARM_STEP = 10
+PRE_WARM_STEP = 0
 SAVE_INTERVAL = 200
-
+naive_env = env.unwrapped
+step_length = naive_env.simulation.step_length / 1000
+plan_horizon = naive_env.horizon
+goal_length = naive_env.goal_length
+NB_MAX_EPISODE_STEPS = goal_length / ((step_length * plan_horizon) * 5)  # episode length / (times per action * min v)
 
 
 
@@ -253,7 +257,7 @@ dqn.compile(Adam(lr=OPTIMIZER_LR_UPPER), metrics=['mae'])
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
 dqn.fit_hrl(env, nb_steps=NB_STEPS, visualize=False, verbose=2, random_start_step_policy=action_fn,
-            save_interval=SAVE_INTERVAL, pre_warm_steps=PRE_WARM_STEP, nb_max_episode_steps=None)
+            save_interval=SAVE_INTERVAL, pre_warm_steps=PRE_WARM_STEP, nb_max_episode_steps=NB_MAX_EPISODE_STEPS)
 
 # # After training is done, we save the final weights.
 # dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)

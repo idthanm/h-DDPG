@@ -476,7 +476,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
             callbacks += [Visualizer()]
 
         parent_dir = os.path.dirname(os.path.dirname(__file__))
-        callbacks += [FileLogger(filepath=parent_dir + '/log.json')]
+        callbacks += [FileLogger(filepath=parent_dir + os.sep + 'log.json')]
         callbacks += [ModelIntervalCheckpoint(filepath=parent_dir + '/checkpoints/model_step{step}.h5f',
                                               interval=save_interval,
                                               verbose=1)]
@@ -494,6 +494,9 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
         episode = np.int16(0)
         self.step = np.int16(0)
+        self.turn_left_agent.step = np.int16(0)
+        self.go_straight_agent.step = np.int16(0)
+        self.turn_right_agent.step = np.int16(0)
         observation = env.encoded_obs
         episode_reward = None
         episode_step = None
@@ -534,12 +537,12 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 lower_action = recent_action[1:]
                 self.turn_right_agent.memory.append(right_obs, lower_action, reward, 1,
                                                     training=self.training)
-            print('————————————————————————————————————————————————————————————————')
-            print('upper_memory_len: ', self.memory.nb_entries)
-            print('left_memory_len: ', self.turn_left_agent.memory.nb_entries)
-            print('straight_memory_len: ', self.go_straight_agent.memory.nb_entries)
-            print('right_memory_len: ', self.turn_right_agent.memory.nb_entries)
-            print('————————————————————————————————————————————————————————————————')
+            print('————————————————————————————————————————')
+            print({'upper_memory_len: ': self.memory.nb_entries,
+                   'left_memory_len: ': self.turn_left_agent.memory.nb_entries,
+                   'straight_memory_len: ': self.go_straight_agent.memory.nb_entries,
+                   'right_memory_len: ': self.turn_right_agent.memory.nb_entries})
+            print('————————————————————————————————————————')
             # TODO: always has a point is not done, but there would be only one bad point in the buffer
             if done:
                 def random_init_state(flag=True):
@@ -570,14 +573,15 @@ class DQNAgent4Hrl(AbstractDQNAgent):
 
                     # Obtain the initial observation by resetting the environment.
                     self.reset_states()
+
                     def random_init_state(flag=True):
                         init_state = [-800, -150-3.75*5/2, 5, 0]
                         if flag:
-                            x = np.random.random() * 1000 - 800
+                            x = np.random.uniform(0, 1) * 1000 - 800
                             lane = np.random.choice([0, 1, 2, 3])
                             y_fn = lambda lane: [-150-3.75*7/2, -150-3.75*5/2, -150-3.75*3/2, -150-3.75*1/2][lane]
                             y = y_fn(lane)
-                            v = np.random.random() * 25
+                            v = np.random.uniform(0, 1) * 25
                             heading = 0
                             init_state = [x, y, v, heading]
                         return init_state
@@ -612,8 +616,6 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                     done = True
                 metrics = self.backward(reward, terminal=done)
                 episode_reward += reward
-
-
                 step_logs = {
                     'action': action,  # processed action
                     'observation': observation,  # true obs
@@ -694,7 +696,10 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         self.turn_left_agent.training = False
         self.go_straight_agent.training = False
         self.turn_right_agent.training = False
-        self.step = 0
+        self.step = np.int16(0)
+        self.turn_left_agent.step = np.int16(0)
+        self.go_straight_agent.step = np.int16(0)
+        self.turn_right_agent.step = np.int16(0)
 
         callbacks = [] if not callbacks else callbacks[:]
 
@@ -735,8 +740,6 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 return init_state
 
             observation = deepcopy(env.reset(init_state=random_init_state(flag=True)))
-            if self.processor is not None:
-                observation = self.processor.process_observation(observation)
             assert observation is not None
 
             # Run the episode until we're done.
@@ -745,15 +748,11 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 callbacks.on_step_begin(episode_step)
 
                 action = self.forward(observation)
-                if self.processor is not None:
-                    action = self.processor.process_action(action)
+                action = self.processor.process_action(action)
                 reward = 0.
-                accumulated_info = {}
                 callbacks.on_action_begin(action)
                 observation, reward, d, info = env.step(action)
                 observation = deepcopy(observation)
-                if self.processor is not None:
-                    observation, reward, d, info = self.processor.process_step(observation, reward, d, info)
                 callbacks.on_action_end(action)
                 if nb_max_episode_steps and episode_step >= nb_max_episode_steps - 1:
                     done = True
@@ -764,12 +763,14 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                     'action': action,
                     'observation': observation,
                     'reward': reward,
-                    'episode': episode,
-                    'info': accumulated_info,
+                    'episode': episode
                 }
                 callbacks.on_step_end(episode_step, step_logs)
                 episode_step += 1
                 self.step += 1
+                self.turn_left_agent.step += 1
+                self.go_straight_agent.step += 1
+                self.turn_right_agent.step += 1
 
             # We are in a terminal state but the agent hasn't yet seen it. We therefore
             # perform one more forward-backward call and simply ignore the action before
