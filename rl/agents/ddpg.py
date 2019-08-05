@@ -12,7 +12,9 @@ from rl.random import OrnsteinUhlenbeckProcess
 from rl.util import *
 
 
-def mean_q(y_true, y_pred):  # The shape of both `y_pred` and `y_true` are `[batch_size, 1]`
+def mean_q(y_true, y_pred):   # The shape of both `y_pred` and `y_true` are `[batch_size, 1]`
+                              # user defined loss should have scalar output! default loss can be [batchsize,]
+                              # because there is a wrap inside
     return K.mean(K.max(y_pred, axis=-1))
 
 
