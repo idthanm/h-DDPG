@@ -12,7 +12,7 @@ from rl.random import OrnsteinUhlenbeckProcess
 from rl.util import *
 
 
-def mean_q(y_true, y_pred):
+def mean_q(y_true, y_pred):  # The shape of both `y_pred` and `y_true` are `[batch_size, 1]`
     return K.mean(K.max(y_pred, axis=-1))
 
 

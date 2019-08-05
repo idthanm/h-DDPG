@@ -3,7 +3,7 @@ import json
 import matplotlib.pyplot as plt
 
 
-def weighted_decay(orig_list, epsilon=0.9):
+def weighted_decay(orig_list, epsilon):
     moving_avg = 0
     processed_list = []
     for value in orig_list:
@@ -94,9 +94,9 @@ plt.plot(episode, episode_reward)
 plt.title('episode_reward')
 
 plt.subplot(222)
-EPSILON = 0.9
-plt.plot(episode, weighted_decay(episode_reward, epsilon=EPSILON))
-plt.title('{}weighted_decay_reward'.format(EPSILON))
+EPSILON = 0.99
+plt.plot(episode, weighted_decay(episode_reward, EPSILON))
+plt.title('{}weighted_decay_reward'.format(str(EPSILON)))
 
 plt.subplot(223)
 plt.plot(episode, nb_steps)

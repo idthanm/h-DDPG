@@ -29,11 +29,11 @@ TBD_right = 38
 LSTM_HIDDEN = 128
 ENCODE_LSTM_HIDDEN = 64
 # Get the environment and extract the number of actions.
-current_path = os.path.dirname(__file__)
-env = EndtoendEnv(setting_path=current_path + '/LasVSim/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
+curr_path = os.path.dirname(__file__)
+env = EndtoendEnv(setting_path=curr_path + '/LasVSim/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
 env = ObservationWrapper(env)
-set_global_seeds(42)  # set of seeds: [42, 0, 1, 2]
-env.seed(42)
+set_global_seeds(0)  # set of seeds: [42, 0, 1, 2]
+env.seed(0)
 # nb_actions = env.action_space.n
 
 
@@ -181,17 +181,17 @@ right_critic_model = model_dict['right_critic_model']
 MEMORY_LIMIT_UPPER = 50000
 WINDOW_LENGTH_UPPER = 1
 NB_STEPS_WARMUP_STEP = 128
-TARGET_MODEL_UPDATE_UPPER = 1e-2
+TARGET_MODEL_UPDATE_UPPER = 1e-3
 OPTIMIZER_LR_UPPER = 0.001
 BATCH_SIZE_UPPER = 32
 
 # define hyperparameter for DDPG agent
 MEMORY_LIMIT = 50000
 WINDOW_LENGTH = 1
-NB_STEPS_WARMUP_CRITIC = 50000
-NB_STEPS_WARMUP_ACTOR = 50000
+NB_STEPS_WARMUP_CRITIC = NB_STEPS_WARMUP_STEP
+NB_STEPS_WARMUP_ACTOR = NB_STEPS_WARMUP_STEP
 GAMMA = 0.99
-TARGET_MODEL_UPDATE = 1e-3
+TARGET_MODEL_UPDATE = 3e-3
 RANDOM_PROCESS_THETA = 0.15
 RANDOM_PROCESS_MU = 0.
 RANDOM_PROCESS_SIGMA = 0.3
@@ -263,4 +263,4 @@ dqn.fit_hrl(env, nb_steps=NB_STEPS, visualize=False, verbose=2, random_start_ste
 # dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
 #
 # # Finally, evaluate our algorithm for 5 episodes.
-# dqn.test(env, nb_episodes=5, visualize=True)
+# dqn.test_hrl(env, nb_episodes=10, visualize=True, model_path='/home/idriver/Documents/checkpoints_onlyupper_seed0_lr0.001_targetupdate0.001_batchsize32_warmupstep128/model_step7200.h5f')

@@ -429,34 +429,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
     def fit_hrl(self, env, nb_steps, random_start_step_policy, callbacks=None, verbose=1,
             visualize=False, pre_warm_steps=0, log_interval=100, save_interval=1,
             nb_max_episode_steps=None):
-        """Trains the agent on the given environment.
 
-        # Arguments
-            env: (`Env` instance): Environment that the agent interacts with. See [Env](#env) for details.
-            nb_steps (integer): Number of training steps to be performed.
-            action_repetition (integer): Number of times the agent repeats the same action without
-                observing the environment again. Setting this to a value > 1 can be useful
-                if a single action only has a very small effect on the environment.
-            callbacks (list of `keras.callbacks.Callback` or `rl.callbacks.Callback` instances):
-                List of callbacks to apply during training. See [callbacks](/callbacks) for details.
-            verbose (integer): 0 for no logging, 1 for interval logging (compare `log_interval`), 2 for episode logging
-            visualize (boolean): If `True`, the environment is visualized during training. However,
-                this is likely going to slow down training significantly and is thus intended to be
-                a debugging instrument.
-            nb_max_start_steps (integer): Number of maximum steps that the agent performs at the beginning
-                of each episode using `start_step_policy`. Notice that this is an upper limit since
-                the exact number of steps to be performed is sampled uniformly from [0, max_start_steps]
-                at the beginning of each episode.
-            start_step_policy (`lambda observation: action`): The policy
-                to follow if `nb_max_start_steps` > 0. If set to `None`, a random action is performed.
-            log_interval (integer): If `verbose` = 1, the number of steps that are considered to be an interval.
-            nb_max_episode_steps (integer): Number of steps per episode that the agent performs before
-                automatically resetting the environment. Set to `None` if each episode should run
-                (potentially indefinitely) until the environment signals a terminal state.
-
-        # Returns
-            A `keras.callbacks.History` instance that recorded the entire training process.
-        """
         if not self.compiled:
             raise RuntimeError('Your tried to fit your agent but it hasn\'t been'
                                ' compiled yet. Please call `compile()` before `fit()`.')
@@ -586,7 +559,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                             init_state = [x, y, v, heading]
                         return init_state
 
-                    observation = deepcopy(env.reset(init_state=random_init_state(flag=True)))
+                    observation = deepcopy(env.reset(init_state=random_init_state()))
                     if self.processor is not None:
                         observation = self.processor.process_observation(observation)
                     assert observation is not None
@@ -659,35 +632,10 @@ class DQNAgent4Hrl(AbstractDQNAgent):
         return history
 
     def test_hrl(self, env, nb_episodes=1, callbacks=None, visualize=True,
-             nb_max_episode_steps=None, nb_max_start_steps=0, start_step_policy=None, verbose=1):
-        """Callback that is called before training begins.
+             nb_max_episode_steps=None, verbose=2, model_path=None):
 
-        # Arguments
-            env: (`Env` instance): Environment that the agent interacts with. See [Env](#env) for details.
-            nb_episodes (integer): Number of episodes to perform.
-            action_repetition (integer): Number of times the agent repeats the same action without
-                observing the environment again. Setting this to a value > 1 can be useful
-                if a single action only has a very small effect on the environment.
-            callbacks (list of `keras.callbacks.Callback` or `rl.callbacks.Callback` instances):
-                List of callbacks to apply during training. See [callbacks](/callbacks) for details.
-            verbose (integer): 0 for no logging, 1 for interval logging (compare `log_interval`), 2 for episode logging
-            visualize (boolean): If `True`, the environment is visualized during training. However,
-                this is likely going to slow down training significantly and is thus intended to be
-                a debugging instrument.
-            nb_max_start_steps (integer): Number of maximum steps that the agent performs at the beginning
-                of each episode using `start_step_policy`. Notice that this is an upper limit since
-                the exact number of steps to be performed is sampled uniformly from [0, max_start_steps]
-                at the beginning of each episode.
-            start_step_policy (`lambda observation: action`): The policy
-                to follow if `nb_max_start_steps` > 0. If set to `None`, a random action is performed.
-            log_interval (integer): If `verbose` = 1, the number of steps that are considered to be an interval.
-            nb_max_episode_steps (integer): Number of steps per episode that the agent performs before
-                automatically resetting the environment. Set to `None` if each episode should run
-                (potentially indefinitely) until the environment signals a terminal state.
-
-        # Returns
-            A `keras.callbacks.History` instance that recorded the entire training process.
-        """
+        if model_path is not None:
+            self.load_weights(model_path)
         if not self.compiled:
             raise RuntimeError('Your tried to test your agent but it hasn\'t been '
                                'compiled yet. Please call `compile()` before `test()`.')
@@ -751,7 +699,7 @@ class DQNAgent4Hrl(AbstractDQNAgent):
                 action = self.processor.process_action(action)
                 reward = 0.
                 callbacks.on_action_begin(action)
-                observation, reward, d, info = env.step(action)
+                observation, reward, done, info = env.step(action)
                 observation = deepcopy(observation)
                 callbacks.on_action_end(action)
                 if nb_max_episode_steps and episode_step >= nb_max_episode_steps - 1:

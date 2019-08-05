@@ -321,7 +321,7 @@ class Traffic(object):
 
         self.__map_type = path
         parent_path = os.path.dirname(__file__)
-        self.__path = parent_path + "Map/" + path + "/"
+        self.__path = parent_path + "/Map/" + path + "/"
         self.type = traffic_type  # For example: Normal
         self.density = traffic_density  # For example: Middle
         self.step_length = str(float(step_length)/1000)
@@ -378,7 +378,7 @@ class Traffic(object):
             traci.start(
                 [SUMO_BINARY, "-c", self.__path + "configuration.sumocfg",
                  "--step-length", self.step_length,
-                 "--lateral-resolution", "1.25", "--seed", self.seed, "--start",
+                 "--lateral-resolution", "1.25", "--start",
                  "--quit-on-end"])
         else:
             traci.start(
