@@ -2,16 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9083e78-8f9a-4b94-8cbb-228cf03303ee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/h-TD3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/h-TD3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/endtoend.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/endtoend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/traffic_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/traffic_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/configuration.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-additions.add.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_Mixed_200.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_Mixed_40.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_Mixed_500.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_VehicleOnly_200.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_VehicleOnly_40.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-traffic_VehicleOnly_500.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map-viewsetting.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/grid-map.net.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Mixed Traffic_Dense.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Mixed Traffic_Middle.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Mixed Traffic_Sparse.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Vehicle Only Traffic_Dense.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Vehicle Only Traffic_Middle.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map1_Urban Road/traffic_generation_Vehicle Only Traffic_Sparse.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/configuration.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-additions.add.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-traffic.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-traffic_VehicleOnly_200.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-traffic_VehicleOnly_40.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-traffic_VehicleOnly_500.rou.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map-viewsetting.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/grid-map.net.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/traffic_generation_Vehicle Only Traffic_Dense.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/traffic_generation_Vehicle Only Traffic_Middle.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map2_Highway/traffic_generation_Vehicle Only Traffic_Sparse.sumocfg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_results.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rl/agents/ddpg.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/ddpg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rl/agents/dqn4hrl.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/dqn4hrl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/agents/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/agents/dqn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/tile_images.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rl/agents/ddpg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="14" selection-start-line="14" selection-end-line="15" selection-end-column="41" />
+            <state relative-caret-position="368">
+              <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
                 <element signature="e#7267#7570#0" />
@@ -42,10 +66,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/LasVSim/endtoend.py">
+        <entry file="file://$PROJECT_DIR$/rl/util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+            <state relative-caret-position="-299">
+              <caret line="80" column="25" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -53,8 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="623">
-              <caret line="260" selection-start-line="260" selection-end-line="260" />
+            <state relative-caret-position="731">
+              <caret line="259" column="12" selection-start-line="259" selection-start-column="12" selection-end-line="259" selection-end-column="12" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
                 <element signature="e#1226#7317#0" />
@@ -64,87 +91,73 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
+        <entry file="file://$PROJECT_DIR$/rl/common/cmd_util.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="190" column="23" selection-start-line="190" selection-start-column="23" selection-end-line="190" selection-end-column="23" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#10310#12099#0" />
-                <element signature="e#12163#13641#0" />
-                <element signature="e#13679#13987#0" />
-                <element signature="e#26356#29952#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/training.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="298" column="45" selection-start-line="298" selection-start-column="45" selection-end-line="298" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/training_utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="1020" column="19" lean-forward="true" selection-start-line="1020" selection-start-column="19" selection-end-line="1020" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/losses.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="1108" column="25" selection-start-line="1108" selection-start-column="25" selection-end-line="1108" selection-end-column="25" />
-              <folding>
-                <element signature="e#22012#22560#0" />
-                <element signature="e#22639#23247#0" />
-                <element signature="e#23336#24001#0" />
-              </folding>
+            <state relative-caret-position="368">
+              <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/utils/generic_utils.py">
+        <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-156">
-              <caret line="170" column="4" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rl/processors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rl/policy.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1058">
-              <caret line="227" column="19" selection-start-line="227" selection-start-column="19" selection-end-line="227" selection-end-column="19" />
+            <state relative-caret-position="2139">
+              <caret line="309" lean-forward="true" selection-start-line="309" selection-end-line="309" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#102#916#0" />
-                <element signature="e#959#3332#0" />
-                <element signature="e#3367#3815#0" />
-                <element signature="e#3853#4884#0" />
-                <element signature="e#4920#5362#0" />
+                <element signature="e#10310#12099#0" />
+                <element signature="e#12163#13641#0" />
+                <element signature="e#13679#13987#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rl/common/misc_util.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="19" lean-forward="true" selection-start-column="19" selection-end-column="19" />
+              <folding>
+                <element signature="e#34#44#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="713">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+              <folding>
+                <element signature="e#34#52#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rl/core.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2714">
+              <caret line="596" column="25" lean-forward="true" selection-start-line="596" selection-start-column="25" selection-end-line="596" selection-end-column="25" />
+              <folding>
+                <element signature="e#24#39#0" expanded="true" />
+                <element signature="e#295#22406#0" />
+                <element signature="e#1647#11202#0" />
+                <element signature="e#11402#19201#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rl/common/vec_env/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -172,7 +185,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/rl/agents/dqn.py" />
-        <option value="$PROJECT_DIR$/rl/agents/__init__.py" />
         <option value="$PROJECT_DIR$/rl/memory.py" />
         <option value="$PROJECT_DIR$/rl/core.py" />
         <option value="$PROJECT_DIR$/rl/processors.py" />
@@ -192,18 +204,20 @@
         <option value="$PROJECT_DIR$/LasVSim/traffic_module.py" />
         <option value="$PROJECT_DIR$/plot_results.py" />
         <option value="$PROJECT_DIR$/rl/agents/dqn4hrl.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/LasVSim/endtoend.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/rl/agents/ddpg.py" />
+        <option value="$PROJECT_DIR$/rl/agents/__init__.py" />
+        <option value="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="597" />
-    <option name="y" value="154" />
+    <option name="x" value="65" />
+    <option name="y" value="52" />
     <option name="width" value="1855" />
-    <option name="height" value="1000" />
+    <option name="height" value="1028" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -227,6 +241,19 @@
               <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
               <item name="rl" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="h-TD3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
+              <item name="rl" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="h-TD3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
+              <item name="rl" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="vec_env" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -237,7 +264,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SearchEverywhereHistoryKey" value="Map&#9;FILE&#9;file://E:/Research/Reinforcement Learning/lasvsim/h-TD3/main.py" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Documents/keras-rl" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/baselines" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -336,8 +363,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.plot_results" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -359,19 +386,32 @@
       <option name="project" value="LOCAL" />
       <updated>1563962718556</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="going on">
+      <created>1564999710177</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1564999710177</updated>
+    </task>
+    <task id="LOCAL-00003" summary="going on">
+      <created>1564999904582</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1564999904582</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26637554" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26637554" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32872927" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49947917" visible="true" weight="0.29051986" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3282365" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" weight="0.40265036" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29969418" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -388,7 +428,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="GO" />
-    <option name="LAST_COMMIT_MESSAGE" value="GO" />
+    <MESSAGE value="going on" />
+    <option name="LAST_COMMIT_MESSAGE" value="going on" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -405,12 +446,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/rl/agents/ddpg.py</url>
-          <line>202</line>
+          <line>204</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/rl/agents/ddpg.py</url>
-          <line>212</line>
+          <line>214</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
@@ -422,14 +463,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/data_structures.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/callbacks.py" />
-    <entry file="file://$PROJECT_DIR$/straight_actor_model_with_shape_info.png" />
-    <entry file="file://$PROJECT_DIR$/checkpoint" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/training/optimizer.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/-1597249077/builtins.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/core.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/lasvsim.py" />
     <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/traffic_module.py" />
     <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/simulator.py" />
     <entry file="file://$PROJECT_DIR$/left_critic_model_with_shape_info.png" />
@@ -465,35 +498,6 @@
     <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/json/__init__.py" />
     <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/tensorflow/python/keras/callbacks.py" />
     <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/matplotlib/figure.py" />
-    <entry file="file://$PROJECT_DIR$/rl/common/tile_images.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3925">
-          <caret line="496" selection-start-line="496" selection-end-line="496" />
-          <folding>
-            <element signature="e#24#39#0" expanded="true" />
-            <element signature="e#1647#11202#0" />
-            <element signature="e#11402#19201#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/misc_util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="9" column="29" lean-forward="true" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LasVSim/simulator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
@@ -536,13 +540,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
           <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plot_results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-768">
-          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -594,45 +591,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rl/processors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LasVSim/endtoend.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="311">
           <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="623">
-          <caret line="260" selection-start-line="260" selection-end-line="260" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#1226#7317#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="190" column="23" selection-start-line="190" selection-start-column="23" selection-end-line="190" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#10310#12099#0" />
-            <element signature="e#12163#13641#0" />
-            <element signature="e#13679#13987#0" />
-            <element signature="e#26356#29952#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -655,28 +617,27 @@
         <state relative-caret-position="-414" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rl/agents/ddpg.py">
+    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/utils/generic_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="14" selection-start-line="14" selection-end-line="15" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#7267#7570#0" />
-            <element signature="e#7635#7939#0" />
-            <element signature="e#7990#8111#0" />
-            <element signature="e#8179#8528#0" />
-            <element signature="e#8580#8720#0" />
-            <element signature="e#8773#8914#0" />
-            <element signature="e#8960#9374#0" />
-            <element signature="e#9420#9701#0" />
-          </folding>
+        <state relative-caret-position="-156">
+          <caret line="170" column="4" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/training_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
-          <caret line="1020" column="19" lean-forward="true" selection-start-line="1020" selection-start-column="19" selection-end-line="1020" selection-end-column="19" />
+          <caret line="1020" column="19" selection-start-line="1020" selection-start-column="19" selection-end-line="1020" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/processors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -692,10 +653,142 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/utils/generic_utils.py">
+    <entry file="file://$PROJECT_DIR$/plot_results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-156">
-          <caret line="170" column="4" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="4" />
+        <state relative-caret-position="184">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/agents/ddpg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#7267#7570#0" />
+            <element signature="e#7635#7939#0" />
+            <element signature="e#7990#8111#0" />
+            <element signature="e#8179#8528#0" />
+            <element signature="e#8580#8720#0" />
+            <element signature="e#8773#8914#0" />
+            <element signature="e#8960#9374#0" />
+            <element signature="e#9420#9701#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LasVSim/Library/default_simulation_setting.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/tile_images.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-299">
+          <caret line="80" column="25" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/misc_util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="19" lean-forward="true" selection-start-column="19" selection-end-column="19" />
+          <folding>
+            <element signature="e#34#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/cmd_util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2714">
+          <caret line="596" column="25" lean-forward="true" selection-start-line="596" selection-start-column="25" selection-end-line="596" selection-end-column="25" />
+          <folding>
+            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#295#22406#0" />
+            <element signature="e#1647#11202#0" />
+            <element signature="e#11402#19201#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="259" column="12" selection-start-line="259" selection-start-column="12" selection-end-line="259" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#1226#7317#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/multiprocessing/__init__.pyi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/agents/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/multiprocessing/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="897">
+          <caret line="81" column="16" lean-forward="true" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="713">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="e#34#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/common/vec_env/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2139">
+          <caret line="309" lean-forward="true" selection-start-line="309" selection-end-line="309" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#10310#12099#0" />
+            <element signature="e#12163#13641#0" />
+            <element signature="e#13679#13987#0" />
+          </folding>
         </state>
       </provider>
     </entry>

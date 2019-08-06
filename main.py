@@ -32,8 +32,8 @@ ENCODE_LSTM_HIDDEN = 64
 curr_path = os.path.dirname(__file__)
 env = EndtoendEnv(setting_path=curr_path + '/LasVSim/Scenario/Highway_endtoend/', plan_horizon=30, history_len=TIME_STEPS)
 env = ObservationWrapper(env)
-set_global_seeds(0)  # set of seeds: [42, 0, 1, 2]
-env.seed(0)
+set_global_seeds(11)  # set of seeds: [42, 0, 1, 2]
+env.seed(11)
 # nb_actions = env.action_space.n
 
 
@@ -253,14 +253,9 @@ dqn = DQNAgent4Hrl(processor=processor, model=upper_model, turn_left_agent=left_
                    target_model_update=TARGET_MODEL_UPDATE_UPPER, policy=policy, enable_double_dqn=True, batch_size=BATCH_SIZE_UPPER)
 dqn.compile(Adam(lr=OPTIMIZER_LR_UPPER), metrics=['mae'])
 
-# Okay, now it's time to learn something! We visualize the training here for show, but this
-# slows down training quite a lot. You can always safely abort the training prematurely using
-# Ctrl + C.
-dqn.fit_hrl(env, nb_steps=NB_STEPS, visualize=False, verbose=2, random_start_step_policy=action_fn,
-            save_interval=SAVE_INTERVAL, pre_warm_steps=PRE_WARM_STEP, nb_max_episode_steps=NB_MAX_EPISODE_STEPS)
 
-# # After training is done, we save the final weights.
-# dqn.save_weights('dqn_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
-#
-# # Finally, evaluate our algorithm for 5 episodes.
-# dqn.test_hrl(env, nb_episodes=10, visualize=True, model_path='/home/idriver/Documents/checkpoints_onlyupper_seed0_lr0.001_targetupdate0.001_batchsize32_warmupstep128/model_step7200.h5f')
+# dqn.fit_hrl(env, nb_steps=NB_STEPS, visualize=False, verbose=2, random_start_step_policy=action_fn,
+#             save_interval=SAVE_INTERVAL, pre_warm_steps=PRE_WARM_STEP, nb_max_episode_steps=NB_MAX_EPISODE_STEPS)
+
+# evaluation
+dqn.test_hrl(env, nb_episodes=10, visualize=True, model_path=curr_path + '/rl/checkpoints/model_step10000.h5f')
