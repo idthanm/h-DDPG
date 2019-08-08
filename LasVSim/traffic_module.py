@@ -424,7 +424,7 @@ class Traffic(object):
         traci.simulationStep()
         print('\nrandom traffic initialized')
 
-    def get_vehicles(self):  # 该部分可直接与gui相替换
+    def get_vehicles(self):
         """Get other vehicles' information not including ego vehicle.
 
         Get other vehicles' information not including ego vehicle.
@@ -444,17 +444,7 @@ class Traffic(object):
         # 获取仿真中所有车辆的信息，包括自车
         veh_info_dict = traci.vehicle.getContextSubscriptionResults('ego')
 
-        # 更新自车所在位置信息（当前车道的限速，距离当前车道停止线的距离）
-        # self.__own_lane_speed_limit = [5.56,
-        #                                5.56,
-        #                                16.67,
-        #                                16.67][
-        #     veh_info_dict['ego'][traci.constants.VAR_LANE_INDEX]]
-        # if veh_info_dict['ego'][traci.constants.VAR_LANE_INDEX] in [2, 3]:
-        #     self.__own_lane_pos = 588.0 - veh_info_dict['ego'][
-        #         traci.constants.VAR_LANEPOSITION]
-        # else:
-        #     self.__own_lane_pos = 9999.9
+
 
         # 将周车列表转换为平台使用的数据格式
         other_veh_info = _getothercarInfo(veh_info_dict, self.vehicleName)
@@ -497,45 +487,6 @@ class Traffic(object):
                 render_flag = False
             else:
                 render_flag = True
-                # if math.fabs(ego_x-c_x) < 10 and math.fabs(ego_y-c_y) < 10:
-                #     if i != 0:
-                #         print(c_x, c_y)
-                #         x1 = c_x + math.cos((c_a + 90) / 180 * math.pi) * (
-                #         length / 2 - width / 2)
-                #         x2 = c_x - math.cos((c_a + 90) / 180 * math.pi) * (
-                #         length / 2 - width / 2)
-                #         x11 = self.own_x + math.cos(self.own_a / 180 * math.pi) * (
-                #         OWN_CAR_START_LENGTH / 2 - OWN_CAR_START_WIDTH / 2)
-                #         x22 = self.own_x - math.cos(self.own_a / 180 * math.pi) * (
-                #         OWN_CAR_START_LENGTH / 2 - OWN_CAR_START_WIDTH / 2)
-                #         y1 = c_y + math.sin((c_a + 90) / 180 * math.pi) * (
-                #         length / 2 - width / 2)
-                #         y2 = c_y - math.sin((c_a + 90) / 180 * math.pi) * (
-                #         length / 2 - width / 2)
-                #         y11 = self.own_y + math.sin(self.own_a / 180 * math.pi) * (
-                #         OWN_CAR_START_LENGTH / 2 - OWN_CAR_START_WIDTH / 2)
-                #         y22 = self.own_y - math.sin(self.own_a / 180 * math.pi) * (
-                #         OWN_CAR_START_LENGTH / 2 - OWN_CAR_START_WIDTH / 2)
-                #         if math.sqrt((x1 - x11) ** 2 + (
-                #             y1 - y11) ** 2) < width / 2 + OWN_CAR_START_WIDTH / 2:
-                #             print(c_x, c_y)
-                #             print('----------------')
-                #             #return [1]
-                #         if math.sqrt((x2 - x11) ** 2 + (
-                #             y2 - y11) ** 2) < width / 2 + OWN_CAR_START_WIDTH / 2:
-                #             print(c_x, c_y)
-                #             print('----------------')
-                #             #return [1]
-                #         if math.sqrt((x1 - x22) ** 2 + (
-                #             y1 - y22) ** 2) < width / 2 + OWN_CAR_START_WIDTH / 2:
-                #             print(c_x, c_y)
-                #             print('----------------')
-                #             #return [1]
-                #         if math.sqrt((x2 - x22) ** 2 + (
-                #             y2 - y22) ** 2) < width / 2 + OWN_CAR_START_WIDTH / 2:
-                #             print(c_x, c_y)
-                #             print('----------------')
-                #             #return [1]
             self.vehicles[i] = dict(type=c_t, x=c_x, y=c_y, v=c_v, angle=c_a,
                                     rotation=c_r, winker=w, winker_time=wt,
                                     render=render_flag, length=length,
