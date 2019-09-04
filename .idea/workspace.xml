@@ -4,80 +4,52 @@
     <list default="true" id="b9083e78-8f9a-4b94-8cbb-228cf03303ee" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/h-TD3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/h-TD3.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_200.rou.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_40.rou.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/traffic_generation_Vehicle Only Traffic_Middle.sumocfg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/traffic_generation_Vehicle Only Traffic_Sparse.sumocfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Library/default_simulation_setting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Library/default_simulation_setting.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/configuration.sumocfg" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/configuration.sumocfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-additions.add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-additions.add.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic.rou.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic.rou.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_500.rou.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_500.rou.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-viewsetting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-viewsetting.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map.net.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map.net.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/traffic_generation_Vehicle Only Traffic_Dense.sumocfg" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/traffic_generation_Vehicle Only Traffic_Dense.sumocfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/Scenario/Highway_endtoend/simulation_setting_file.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/Scenario/Highway_endtoend/simulation_setting_file.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/agent_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/agent_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/data_structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/data_structures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/end_to_end_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/end_to_end_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/endtoend.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/endtoend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/endtoend_env_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/endtoend_env_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/lasvsim.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/lasvsim.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LasVSim/reference.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/reference.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LasVSim/simulator.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/simulator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LasVSim/traffic_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/LasVSim/traffic_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_results.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/agents/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/agents/ddpg.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/ddpg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/agents/dqn4hrl.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/agents/dqn4hrl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/callbacks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/cmd_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/cmd_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/misc_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/misc_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/vec_env/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/vec_env/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/policy.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/policy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/processors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/random.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/random.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rl/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/rl/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5424">
-              <caret line="244" column="52" selection-start-line="244" selection-start-column="52" selection-end-line="244" selection-end-column="52" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simulator.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/LasVSim/simulator.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3025">
-              <caret line="131" column="35" lean-forward="true" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="traffic_module.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/LasVSim/traffic_module.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="306" column="20" lean-forward="true" selection-start-line="306" selection-start-column="20" selection-end-line="306" selection-end-column="20" />
-              <folding>
-                <element signature="e#238#3910#0" />
-                <element signature="e#3946#4027#0" />
-                <element signature="e#4107#4382#0" />
-                <element signature="e#5321#7715#0" />
-                <element signature="e#7718#7762#0" />
-                <element signature="e#9349#10468#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dqn4hrl.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="384" column="70" lean-forward="true" selection-start-line="384" selection-start-column="70" selection-end-line="384" selection-end-column="70" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="policy.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rl/policy.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="225" column="18" lean-forward="true" selection-start-line="225" selection-start-column="18" selection-end-line="225" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -96,78 +68,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/rl/agents/dqn.py" />
-        <option value="$PROJECT_DIR$/rl/memory.py" />
-        <option value="$PROJECT_DIR$/rl/core.py" />
-        <option value="$PROJECT_DIR$/rl/processors.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/lasvsim.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/simulator.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/agent_module.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/reference.py" />
-        <option value="$PROJECT_DIR$/rl/util.py" />
-        <option value="$PROJECT_DIR$/rl/test.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/traffic_module.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/envs/user/LasVSim/endtoend.py" />
-        <option value="$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/gym-0.13.0-py3.7.egg/gym/wrappers/endtoend_wrapper.py" />
-        <option value="$PROJECT_DIR$/LasVSim/reference.py" />
-        <option value="$PROJECT_DIR$/rl/callbacks.py" />
-        <option value="$PROJECT_DIR$/rl/common/misc_util.py" />
-        <option value="$PROJECT_DIR$/plot_results.py" />
-        <option value="$PROJECT_DIR$/rl/agents/dqn4hrl.py" />
-        <option value="$PROJECT_DIR$/LasVSim/endtoend.py" />
-        <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/rl/agents/__init__.py" />
-        <option value="$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/rl/agents/ddpg.py" />
-        <option value="$PROJECT_DIR$/LasVSim/simulator.py" />
-        <option value="$PROJECT_DIR$/LasVSim/traffic_module.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-84" />
-    <option name="y" value="25" />
-    <option name="width" value="1700" />
-    <option name="height" value="1030" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="h-TD3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="h-TD3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
-              <item name="LasVSim" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="h-TD3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="h-TD3" type="462c0819:PsiDirectoryNode" />
-              <item name="rl" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
+  <component name="ProjectId" id="1QMEk2NCqff0ZmW94XbGdprsFFT" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SearchEverywhereHistoryKey" value="Map&#9;FILE&#9;file://E:/Research/Reinforcement Learning/lasvsim/h-TD3/main.py" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Documents/baselines" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -206,11 +113,15 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="plot_results" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="h-TD3" />
@@ -224,11 +135,15 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plot_results.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="h-TD3" />
@@ -242,11 +157,15 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.main" />
@@ -271,6 +190,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1563845152050</updated>
+      <workItem from="1567572206596" duration="1248000" />
     </task>
     <task id="LOCAL-00001" summary="GO">
       <created>1563962718556</created>
@@ -296,52 +216,19 @@
     <option name="localTasksCounter" value="4" />
     <servers />
   </component>
-  <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23372395" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5005208" side_tool="true" weight="0.32978722" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.07596685" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32925585" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" weight="0.40265036" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.29969418" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="11" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.33100557" />
-    </layout>
-    <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.3437863" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947917" weight="0.40265036" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.29969418" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5005208" side_tool="true" weight="0.32978722" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.07596685" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.33100557" />
-      <window_info anchor="bottom" id="Messages" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32925585" />
-    </layout-to-restore>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="GO" />
@@ -378,285 +265,5 @@
         <watch expression="unprocessed_nodes" />
       </configuration>
     </watches-manager>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/LasVSim/reference.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-375">
-          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/sumo/tools/traci/storage.py" />
-    <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/json/__init__.py" />
-    <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/tensorflow/python/keras/callbacks.py" />
-    <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/matplotlib/figure.py" />
-    <entry file="file:///usr/share/sumo/tools/traci/__init__.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/subprocess.py" />
-    <entry file="file://$PROJECT_DIR$/rl/log.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-529">
-          <caret column="535" selection-start-column="535" selection-end-column="535" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/checkpoints/checkpoint">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/network.py" />
-    <entry file="file://$PROJECT_DIR$/rl/callbacks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-354">
-          <caret line="103" column="27" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="27" />
-          <folding>
-            <element signature="e#435#1118#0" />
-            <element signature="e#1164#4211#0" />
-            <element signature="e#4246#4766#0" />
-            <element signature="e#4809#9782#0" />
-            <element signature="e#9826#13133#0" />
-            <element signature="e#13168#16238#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="265" column="27" selection-start-line="265" selection-start-column="27" selection-end-line="265" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/typing.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/training.py" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/collections/__init__.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-414" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/utils/generic_utils.py" />
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/engine/training_utils.py" />
-    <entry file="file://$PROJECT_DIR$/rl/processors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/tensorflow2/lib/python3.7/site-packages/tensorflow/python/keras/losses.py" />
-    <entry file="file://$PROJECT_DIR$/plot_results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Library/default_simulation_setting.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/tile_images.py" />
-    <entry file="file://$PROJECT_DIR$/rl/common/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-299">
-          <caret line="80" column="25" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/misc_util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/cmd_util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3925">
-          <caret line="496" selection-start-line="496" selection-end-line="496" />
-          <folding>
-            <element signature="e#24#39#0" expanded="true" />
-            <element signature="e#1647#11202#0" />
-            <element signature="e#11402#19201#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/multiprocessing/__init__.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/agents/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="33" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/multiprocessing/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="897">
-          <caret line="81" column="16" lean-forward="true" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/vec_env/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/tensorflow/python/keras/optimizers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2825">
-          <caret line="517" column="44" selection-start-line="517" selection-start-column="44" selection-end-line="517" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/anaconda3/envs/tensorflow2/Lib/site-packages/tensorflow/python/keras/backend.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="3471" column="39" selection-start-line="3471" selection-start-column="39" selection-end-line="3471" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map.net.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-525" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-additions.add.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-62">
-          <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_200.rou.xml" />
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic.rou.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="24" column="4" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/agent_module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-606" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-viewsetting.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/traffic_generation_Vehicle Only Traffic_Dense.sumocfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="12" column="42" selection-start-line="12" selection-start-column="42" selection-end-line="12" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/configuration.sumocfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/Map/Map3_Highway_v2/grid-map-traffic_VehicleOnly_500.rou.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/endtoend.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1600">
-          <caret line="462" column="72" lean-forward="true" selection-start-line="462" selection-start-column="72" selection-end-line="462" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/agents/ddpg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="823">
-          <caret line="44" column="27" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/lasvsim.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/agents/dqn4hrl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="384" column="70" lean-forward="true" selection-start-line="384" selection-start-column="70" selection-end-line="384" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/common/vec_env/subproc_env_vec.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rl/policy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="225" column="18" lean-forward="true" selection-start-line="225" selection-start-column="18" selection-end-line="225" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5424">
-          <caret line="244" column="52" selection-start-line="244" selection-start-column="52" selection-end-line="244" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/simulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3025">
-          <caret line="131" column="35" lean-forward="true" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LasVSim/traffic_module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="306" column="20" lean-forward="true" selection-start-line="306" selection-start-column="20" selection-end-line="306" selection-end-column="20" />
-          <folding>
-            <element signature="e#238#3910#0" />
-            <element signature="e#3946#4027#0" />
-            <element signature="e#4107#4382#0" />
-            <element signature="e#5321#7715#0" />
-            <element signature="e#7718#7762#0" />
-            <element signature="e#9349#10468#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>
